@@ -2,7 +2,7 @@
 name: Tareas
 about: Plantilla para la elaboracion de las tareas
 title: 'Tarea NNN: XXX'
-labels: ''
+labels: 'estado: abierta'
 assignees: ''
 
 ---
