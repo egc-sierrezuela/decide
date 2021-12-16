@@ -10,12 +10,8 @@
 
 {% block content %}
 <div>
-<form method="post" class>{% csrf_token %}
-	{{form.as_p}}
-	<input class="btn btn-primary" type="Submit" value="Registrar"/>
-</form>
-{% if message %}
-<p>Error: {{message}}</p>
-{% endif %}
+Has cerrado la sesion. Esperamos volverte a ver pronto.
+
+<a href="authentication/login">Volver a iniciar sesion</a>.
 </div>
 {% endblock %}
