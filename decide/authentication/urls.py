@@ -11,7 +11,7 @@ urlpatterns = [
     path('getuser-api/', GetUserViewAPI.as_view()),
     path('register-api/', RegisterViewAPI.as_view()),
     path('register/', RegisterView.as_view()),
-    path('login/', LoginView.as_view()),
+    path('login/', LoginView.as_view(),name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path('login-success', SuccessView.as_view())
+    path('login-success', SuccessView.as_view(),name="login-success")
 ]
