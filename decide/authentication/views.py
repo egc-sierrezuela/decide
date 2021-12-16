@@ -8,6 +8,7 @@ from rest_framework.views import APIView, View
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404,render,redirect
 from django.core.exceptions import ObjectDoesNotExist
@@ -59,14 +60,12 @@ class RegisterViewAPI(APIView):
 
 
 class RegisterView(View):
-
     def get(get, request):
-        if(not request.user.is_authenticated):
-            form = RegisterForm()
-            params = {'form':form}
-            return render(request,'register.html',params)
-        else:
+        if(request.user.is_authenticated):
             return HttpResponse('Debe ingresar como usuario anonimo',status=401)
+        form = RegisterForm()
+        params = {'form':form}
+        return render(request,'register.html',params)
         
     def post(self, request):
         form = RegisterForm(request.POST)
@@ -81,10 +80,37 @@ class RegisterView(View):
             user.email = email
             user.set_password(pwd)
             user.save()
-            login(request,user)
+            login(request,user, backend='authentication.backends.EmailOrUsernameModelBackend')
         except IntegrityError:
             params = {'form':form, 'message':'Usuario ya existente.'}
             return render(request,'register.html',params)
-        params = {'username':username}
-        return render(request,'succesful_register.html',params)
+        return redirect('/authentication/login-success')
 
+class LoginView(View):
+    def get(get, request):
+        if(request.user.is_authenticated):
+            return HttpResponse('Debe ingresar como usuario anonimo',status=401)
+        form = AuthenticationForm()
+        params = {'form':form}
+        return render(request,'login.html',params)
+
+    def post(self, request):
+        form = AuthenticationForm(request.POST)
+        usuario = request.POST['username']
+        pwd = request.POST['password']
+        acceso = authenticate(username=usuario,password=pwd)
+        if acceso is None:
+            params = {'form':form, 'message':'Usuario o contraseña incorrectas.'}
+            return render(request,'login.html',params)
+        if not acceso.is_active:
+            params = {'form':form, 'message':'Usuario no activo.'}
+            return render(request,'login.html',params)
+        login(request,acceso)
+        return redirect('/authentication/login-success')
+
+
+class SuccessView(View):
+    def get(get, request):
+        if(not request.user.is_authenticated):
+            return HttpResponse('Debe iniciar sesion',status=401)
+        return render(request,'successful_login.html')
