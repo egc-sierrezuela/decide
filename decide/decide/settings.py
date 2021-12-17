@@ -30,17 +30,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-APIS = {
-    'authentication': 'http://localhost:8000',
-    'base': 'http://localhost:8000',
-    'booth': 'hhttp://localhost:8000',
-    'census': 'http://localhost:8000',
-    'mixnet': 'http://localhost:8000',
-    'postproc': 'http://localhost:8000',
-    'store': 'http://localhost:8000',
-    'visualizer': 'http://localhost:8000',
-    'voting': 'http://localhost:8000',
-}
+APIS = {}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -82,7 +72,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://git.heroku.com/egc-sierrezuela-2.git'
+BASEURL = 'https://egc-sierrezuela-2.herokuapp.com/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
