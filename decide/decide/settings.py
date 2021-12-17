@@ -68,6 +68,7 @@ MODULES = [
     'social_django',
 ]
 
+
 BASEURL = 'https://egc-sierrezuela-2.herokuapp.com'
 
 APIS = {
@@ -81,6 +82,7 @@ APIS = {
     'visualizer': 'https://egc-sierrezuela-2.herokuapp.com/',
     'voting': 'https://egc-sierrezuela-2.herokuapp.com/',
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
