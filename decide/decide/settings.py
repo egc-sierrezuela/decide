@@ -22,7 +22,7 @@ SECRET_KEY = '^##ydkswfu0+=ofw0l#$kv^8n)0$i(qd&d&ol#p9!b$8*5%j1+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -65,11 +65,22 @@ MODULES = [
     'store',
     'visualizer',
     'voting',
+    'social_django',
 ]
 
 BASEURL = 'https://egc-sierrezuela-2.herokuapp.com'
 
-APIS = {}
+APIS = {
+    'authentication': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'base': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'booth': 'hhttps://egc-sierrezuela-2.herokuapp.com/',
+    'census': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'mixnet': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'postproc': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'store': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'visualizer': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'voting': 'https://egc-sierrezuela-2.herokuapp.com/',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,15 +119,30 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'decide',
+        'NAME': 'postgres',
         'USER': 'decide',
         'PASSWORD': 'decide',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
 
+AUTH_AUTHENTICATION_TYPE = 'both'
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'login-success'
+LOGOUT_REDIRECT_URL = 'login'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1006606710196386'
+SOCIAL_AUTH_FACEBOOK_SECRET = '12d5bc07c1c41cea14846e85bbe4b460'
+
+AUTHENTICATION_BACKENDS = (
+    'authentication.backends.EmailOrUsernameModelBackend',
+    'social_core.backends.linkedin.LinkedinOAuth2',
+    'social_core.backends.instagram.InstagramOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+)
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
