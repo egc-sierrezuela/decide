@@ -1,16 +1,8 @@
-# Title: Summary, imperative, start upper case, don't end with a period
-# No more than 50 chars. #### 50 chars is here: #
+#TITULO EN INFINITIVO Y EN MAYUSCULAS
+#Dejar una linea en blanco
 
-# Remember blank line between title and body.
+#Explicar brevemente qué se ha hecho en el commit, y no el cómo
 
-# Body: Explain *what* and *why* (not *how*). Include task ID (Task NNN).
-# Wrap at 72 chars. ################################## which is here: #
-
-Advice:
-# 1.Separate subject from body with a blank line
-# 2. Limit the subject line to 50 characters
-# 3. Capitalize the subject line
-# 4. Do not end the subject line with a period
-# 5. Use the imperative mood in the subject line
-# 6. Wrap the body at 72 characters
-# 7. Use the body to explain what and why vs. how
+#Si se desea agregar una linea con los usuarios que han contribuido
+#Dejar una linea en blanco
+#Utilizar el formato 'Apellidos, Nombre <@usuario>'
