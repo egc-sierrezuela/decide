@@ -19,6 +19,9 @@
 <button>
      <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
  </button>
+ <button>
+     <a href="{% url 'social:begin' 'linkedin-oauth2' %}">Login with LinkedIn</a>
+ </button>
 {% if message %}
 <p>Error: {{message}}</p>
 {% endif %}

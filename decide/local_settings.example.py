@@ -49,6 +49,19 @@ LOGOUT_REDIRECT_URL = 'login'
 SOCIAL_AUTH_FACEBOOK_KEY = '1006606710196386'
 SOCIAL_AUTH_FACEBOOK_SECRET = '12d5bc07c1c41cea14846e85bbe4b460'
 
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '78ppaogakulk4n'         # Client ID
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'aAr8rmN2zlEzw6Vz' # Client Secret
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['email-address', 'formatted-name', 'public-profile-url', 'picture-url']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
+    ('id', 'id'),
+    ('formattedName', 'name'),
+    ('emailAddress', 'email_address'),
+    ('pictureUrl', 'picture_url'),
+    ('publicProfileUrl', 'profile_url'),
+]
+
+
 AUTHENTICATION_BACKENDS = (
     'authentication.backends.EmailOrUsernameModelBackend',
     'social_core.backends.linkedin.LinkedinOAuth2',
