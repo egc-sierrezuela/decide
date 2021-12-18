@@ -49,6 +49,10 @@ LOGOUT_REDIRECT_URL = 'login'
 SOCIAL_AUTH_FACEBOOK_KEY = '1006606710196386'
 SOCIAL_AUTH_FACEBOOK_SECRET = '12d5bc07c1c41cea14846e85bbe4b460'
 
+SOCIAL_AUTH_GITHUB_KEY = '1d28207db9b47ce585ea'
+SOCIAL_AUTH_GITHUB_SECRET = '4da7a5f6d9cf1d91572ad09b62a561df393a7d64'
+
+
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '78ppaogakulk4n'         # Client ID
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'aAr8rmN2zlEzw6Vz' # Client Secret
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress']
@@ -67,6 +71,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.linkedin.LinkedinOAuth2',
     'social_core.backends.instagram.InstagramOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.github.GithubOAuth2',
 )
 
 # number of bits for the key, all auths should use the same number of bits
