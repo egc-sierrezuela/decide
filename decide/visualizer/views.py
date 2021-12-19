@@ -20,13 +20,20 @@ class VisualizerView(TemplateView):
 
             if r[0]['end_date'] is None:
                 stats = {}
-                stats['census_size'] = getEstadisticas('census_size', vid)
-                stats['voters_turnout'] = getEstadisticas('turnout', vid)
-                stats['participation_ratio'] = round((stats['voters_turnout']/stats['census_size'])*100,2)
+                if(getEstadisticas('turnout', vid) != 0):
+                    stats['census_size'] = getEstadisticas('census_size', vid)
+                    stats['voters_turnout'] = getEstadisticas('turnout', vid)
+                    stats['participation_ratio'] = round((stats['voters_turnout']/stats['census_size'])*100,2)
                 
-                for i,j in stats.items():
-                    context['stats_' + str(i)] = j
-
+                    for i,j in stats.items():
+                        context['stats_' + str(i)] = j
+                else:
+                    stats['census_size'] = 0
+                    stats['voters_turnout'] = 0
+                    stats['participation_ratio'] = 0
+                            
+                    for i,j in stats.items():
+                        context['stats_' + str(i)] = j
         except Exception:
             raise Http404
 
