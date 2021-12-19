@@ -4,7 +4,6 @@ from django.conf import settings
 from django.http import Http404
 from census.models import Census
 from store.models import Vote
-
 from base import mods
 
 
@@ -16,7 +15,7 @@ class VisualizerView(TemplateView):
         vid = kwargs.get('voting_id', 0)
 
         try:
-            r = mods.get('voting', params={'id': vid})
+            r = mods.get('voting', params={'id':vid})
             context['voting'] = json.dumps(r[0])
 
             if r[0]['end_date'] is None:
@@ -24,6 +23,7 @@ class VisualizerView(TemplateView):
                 stats['census_size'] = getEstadisticas('census_size', vid)
                 stats['voters_turnout'] = getEstadisticas('turnout', vid)
                 stats['participation_ratio'] = round((stats['voters_turnout']/stats['census_size'])*100,2)
+                
                 for i,j in stats.items():
                     context['stats_' + str(i)] = j
 
