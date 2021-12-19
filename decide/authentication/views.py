@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404,render,redirect
 from django.core.exceptions import ObjectDoesNotExist
 from authentication.forms import RegisterForm
 from django.http import HttpResponse
+from .models import Persona
 
 from .serializers import UserSerializer
 
@@ -75,11 +76,14 @@ class RegisterView(View):
         username = form.cleaned_data['username']
         email = form.cleaned_data['email']
         pwd = form.cleaned_data['password']
+        sex= form.cleaned_data['sexo']
         try:
             user = User(username=username)
             user.email = email
             user.set_password(pwd)
             user.save()
+            persona = Persona(usuario = user, sexo=sex)
+            persona.save()
             login(request,user, backend='authentication.backends.EmailOrUsernameModelBackend')
         except IntegrityError:
             params = {'form':form, 'message':'Usuario ya existente.'}
