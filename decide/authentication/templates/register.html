@@ -8,6 +8,11 @@
          href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
 {% endblock %}
 
+<label for="reCaptcha">{% trans "Captcha" %}</label>
+				<script src='https://www.google.com/recaptcha/api.js'></script>
+				<div class="g-recaptcha" data-sitekey="6Lc6h4UUAAAAAKV3jjkEn0W3I_o_wprhVOUzXI9p"></div>
+				<br />
+
 {% block content %}
 <div>
 <form method="post" class>{% csrf_token %}
