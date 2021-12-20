@@ -46,3 +46,5 @@ def getEstadisticas(requerido, vid):
         return Vote.objects.filter(voting_id=vid).count()
     else:
         return None
+
+
