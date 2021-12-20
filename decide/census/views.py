@@ -27,17 +27,22 @@ def CensusImport(request):
                     votacion=str(parse[1][:-1])
                     votantes.append(votante)
                     votaciones.append(votacion)
-                    # try:
-                    #     census = Census(voting_id=votante, voter_id=votacion)
-                    #     census.save()
-                    # except:
-                    #     return render(request,'censusImport.html',{'votantes':votantes,'votaciones':votaciones,'noimportado':'Ha habido un error'})
 
+                    try:
+                        Census.objects.update_or_create(
+                            voting_id=int(votacion),
+                            voter_id=int(votante),
+                        )
+                    except:
+                        return render(request,'censusImport.html',{'votantes':votantes,'votaciones':votaciones,'noimportado':'Ha habido un error'})
+               
                 return render(request,'censusImport.html',{'votantes':votantes,'votaciones':votaciones,'importado':'Los datos se han cargado correctamente'})
 
-            except:
-                return render(request,'censusImport.html',{'vacio':'Selecciona un archivo csv con el formato indicado'})
+            except: 
+               return render(request,'censusImport.html',{'vacio':'Selecciona un archivo csv con el formato indicado'})
+    
     return render(request,'censusImport.html')
+
 
 
 

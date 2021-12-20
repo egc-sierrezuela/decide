@@ -7,8 +7,10 @@
 <br>
 <h2>Debes adjuntar un fichero csv con el formato 'id-votante,id-votacion'</h2>
 <br>
+
 <form action="../../census/importar" method="POST" enctype="multipart/form-data" target="_self">
     {% csrf_token %}
+
     <p>
   
       Adjunta el fichero csv:
@@ -20,42 +22,31 @@
     </p>
   
   </form>
+
 <h3 style=color:red>{{vacio}}</h3>
 <h3 style=color:green>{{importado}}</h3>
 
     <table>
     <tr>
         <td>id-votante:</td>
+
         {% for a in votantes %}
           <td>{{a}}</td>
         {% endfor %}
+
     </tr>
     <tr>
         <td>id-votacion:</td>
+
         {% for e in votaciones %}
           <td>{{e}}</td>
         {% endfor %}
+
     </tr>
     
         
     </tr>
     </table> 
-{{noimportado}}
 
-{% if importado %}
-<form action="../../census/importarAceptado">
-  
-      Se va a sobreescribir el censo anterior, ¿está seguro?
-    <br>
-      <button type="submit" value="True">Sí</button>
-  
-  </form>
-<form action="../../census/importar">
-  
-  
-      <button type="submit" value="False">No</button>
-  
-  </form>
-{% endif %}
 
 {% endblock %}
