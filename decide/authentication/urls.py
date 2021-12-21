@@ -13,5 +13,5 @@ urlpatterns = [
     path('register-alt/', RegisterView.as_view()),
     path('login-alt/', LoginView.as_view(),name="login"),
     path("logout-alt/", auth_views.LogoutView.as_view(), name="logout"),
-    path('login-success/', SuccessView.as_view(),name="login-success")
+    path('login-success/', SuccessView.as_view(),name="login-success"),
 ]
