@@ -12,3 +12,5 @@ jsonnet==0.12.1
 social-auth-app-django==3.1.0
 django-heroku
 gunicorn
+django-ipware
+ip2geotools
