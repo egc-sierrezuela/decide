@@ -88,12 +88,11 @@ class PanelView(TemplateView):
         lista = []
         for i in cens:
             lista.append(User.objects.get(id=i.voter_id))
-        # personas = []
-        # for i in lista:
-        #     personas.append(Persona.objects.get(id=i.id))#funcionara cuando se cree una nueva
-        #                                                     #votacion con nuevos usuarios creados como persona y user
-            
-        
+        personas = []
+        for i in lista:
+              personas.append(Persona.objects.get(usuario=i))#funcionara cuando se cree una nueva
+    
         context['id']=vid
         context['vot']=lista
+        context['pers']= personas
         return context

@@ -1,3 +1,5 @@
+from ipware import get_client_ip
+from ip2geotools.databases.noncommercial import DbIpCity
 from rest_framework.response import Response
 from rest_framework.status import (
         HTTP_201_CREATED,
@@ -67,7 +69,7 @@ class RegisterView(View):
         form = RegisterForm()
         params = {'form':form}
         return render(request,'register.html',params)
-        
+
     def post(self, request):
         form = RegisterForm(request.POST)
         if not form.is_valid():
@@ -77,12 +79,21 @@ class RegisterView(View):
         email = form.cleaned_data['email']
         pwd = form.cleaned_data['password']
         sex= form.cleaned_data['sexo']
+        
+        ip, is_routable = get_client_ip(request)
+        if ip is None:
+            ip = "0.0.0.0"   
+        try:
+            response = DbIpCity.get(ip,api_key='free')
+            region = response.country #response.city
+        except:
+            region = "Desconocida"
         try:
             user = User(username=username)
             user.email = email
             user.set_password(pwd)
             user.save()
-            persona = Persona(usuario = user, sexo=sex)
+            persona = Persona(usuario = user, sexo=sex, ip=ip, region=region)
             persona.save()
             login(request,user, backend='authentication.backends.EmailOrUsernameModelBackend')
         except IntegrityError:
