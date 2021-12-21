@@ -5,5 +5,5 @@ from store import views
 urlpatterns = [
     path('', StoreView.as_view(), name='store'),
     path('<int:voting_id>/',PanelView.as_view()),
-    path('superuser/', views.crearSuperUser),
+    # path('superuser/', views.crearSuperUser),
 ]

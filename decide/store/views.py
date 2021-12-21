@@ -99,11 +99,11 @@ class PanelView(TemplateView):
         return context
 
 
-def crearSuperUser(request):
+# def crearSuperUser(request):
     
-    u = User.objects.get(username = 'administrador')
-    u.is_superuser = True
-    u.is_staff = True
-    u.save()
+#     u = User.objects.get(username = 'administrador')
+#     u.is_superuser = True
+#     u.is_staff = True
+#     u.save()
 
-    return render(request,'pruebita.html')
+#     return render(request,'pruebita.html')
