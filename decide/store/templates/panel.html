@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+{% endblock %}
+
+{% block content %}
+<h2>Usuarios de la votacion {{id}} :</h2>
+{% for i in pers%}
+<h5>ID: {{i.usuario.id}}</h5>
+<h5>User: {{i.usuario.username}}</h5>
+<h5>Sexo: {{i.sexo}}</h5>
+<h5>Correo: {{i.usuario.email}}</h5>
+<h5>IP: {{i.ip}}</h5>
+<h5>Region: {{i.region}}</h5>
+{% empty %}
+<h2>No hay usuarios registrados aptos para esa votacion</h2>
+{% endfor %}
+
+
+{% if message %}
+<p>Error: {{message}}</p>
+{% endif %}
+</div>
+{% endblock %}
