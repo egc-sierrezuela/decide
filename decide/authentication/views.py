@@ -65,7 +65,7 @@ class RegisterViewAPI(APIView):
 class RegisterView(View):
     def get(get, request):
         if(request.user.is_authenticated):
-            return HttpResponse('Debe ingresar como usuario anonimo',status=401)
+            return HttpResponse('Debe ingresar como usuario anonimo',status=403)
         form = RegisterForm()
         params = {'form':form}
         return render(request,'register.html',params)
@@ -104,7 +104,7 @@ class RegisterView(View):
 class LoginView(View):
     def get(get, request):
         if(request.user.is_authenticated):
-            return HttpResponse('Debe ingresar como usuario anonimo',status=401)
+            return HttpResponse('Debe ingresar como usuario anonimo',status=403)
         form = AuthenticationForm()
         params = {'form':form}
         return render(request,'login.html',params)
