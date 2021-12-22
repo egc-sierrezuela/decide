@@ -1,7 +1,11 @@
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+
 from django.shortcuts import render
 from django import forms
+
+from django.http import HttpResponse
+
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.status import (
@@ -15,6 +19,9 @@ from rest_framework.status import (
 from base.perms import UserIsStaff
 from .models import Census
 import csv
+from django.shortcuts import render
+from census.forms import votacionForm
+
 def CensusImport(request):
     if request.method == 'POST':
             try:
@@ -45,7 +52,6 @@ def CensusImport(request):
 
 
 
-
 class CensusCreate(generics.ListCreateAPIView):
     permission_classes = (UserIsStaff,)
 
@@ -66,6 +72,7 @@ class CensusCreate(generics.ListCreateAPIView):
         return Response({'voters': voters})
 
 
+
 class CensusDetail(generics.RetrieveDestroyAPIView):
 
     def destroy(self, request, voting_id, *args, **kwargs):
@@ -81,3 +88,31 @@ class CensusDetail(generics.RetrieveDestroyAPIView):
         except ObjectDoesNotExist:
             return Response('Invalid voter', status=ST_401)
         return Response('Valid voter')
+
+
+
+def elegirVotacion(request):
+    formulario = votacionForm()
+    censos = None
+    idVotacion = None
+    if request.method == 'POST':
+        formulario = votacionForm(request.POST)
+        if formulario.is_valid(): #Corre la validación correspondiente
+            idVotacion = formulario.cleaned_data['votacion']
+            censos = Census.objects.filter(voting_id = idVotacion)
+    return render(request, 'inicio.html', {'formulario':formulario, 'censos':censos, 'idVotacion':idVotacion})
+
+
+
+
+
+def exportarCenso(request, idVotacion):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="censo.csv"'
+    file = csv.writer(response)
+    censos = Census.objects.filter(voting_id = idVotacion)
+    file.writerow(['Id votante'])
+    for c in censos:
+        file.writerow([c.voter_id])
+
+    return response
