@@ -10,6 +10,7 @@ from base.models import Auth, Key
 
 class Question(models.Model):
     desc = models.TextField()
+    postproc_type=models.IntegerField(choices={(1,'Dhont'),(2,'Borda'),(3,'SaintLague')},default=1)
 
     def __str__(self):
         return self.desc
