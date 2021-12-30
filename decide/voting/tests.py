@@ -37,14 +37,22 @@ class VotingTestCase(BaseTestCase):
         for i in range(5):
             opt = QuestionOption(question=q, option='option {}'.format(i+1))
             opt.save()
-        v = Voting(name='test voting', question=q)
+        q2 = Question(desc='test question2')
+        q2.save()
+        for i in range(5):
+            opt2 = QuestionOption(question=q2, option='option2 {}'.format(i+1))
+            opt2.save()
+        lista=[]
+        lista.append(q)
+        lista.append(q2)
+        v = Voting(name='test voting')
         v.save()
+        v.question.set(lista)
 
         a, _ = Auth.objects.get_or_create(url=settings.BASEURL,
                                           defaults={'me': True, 'name': 'test auth'})
         a.save()
         v.auths.add(a)
-
         return v
 
     def create_voters(self, v):
