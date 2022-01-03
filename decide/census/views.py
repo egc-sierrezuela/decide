@@ -1,5 +1,7 @@
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
+from django import forms
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.status import (
@@ -12,6 +14,36 @@ from rest_framework.status import (
 
 from base.perms import UserIsStaff
 from .models import Census
+import csv
+def CensusImport(request):
+    if request.method == 'POST':
+            try:
+                nuevoCenso=request.FILES['nuevoCenso']
+                votantes=[]
+                votaciones=[]
+                for row in nuevoCenso:
+                    parse=str(row[:-1]).split(',')
+                    votante=str(parse[0][2:])
+                    votacion=str(parse[1][:-1])
+                    votantes.append(votante)
+                    votaciones.append(votacion)
+
+                    try:
+                        Census.objects.update_or_create(
+                            voting_id=int(votacion),
+                            voter_id=int(votante),
+                        )
+                    except:
+                        return render(request,'censusImport.html',{'votantes':votantes,'votaciones':votaciones,'noimportado':'Ha habido un error'})
+               
+                return render(request,'censusImport.html',{'votantes':votantes,'votaciones':votaciones,'importado':'Los datos se han cargado correctamente'})
+
+            except: 
+               return render(request,'censusImport.html',{'vacio':'Selecciona un archivo csv con el formato indicado'})
+    
+    return render(request,'censusImport.html')
+
+
 
 
 class CensusCreate(generics.ListCreateAPIView):
