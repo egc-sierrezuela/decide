@@ -102,6 +102,8 @@ class VisualizerTestCase(BaseTestCase):
         response = self.client.put('/visualizer/'+str(v.pk), follow=True)
         self.assertEqual(response.status_code, 200)
 
-
+    def test_visualizer_voting_id_negativo(self):
+        response = self.client.put('/visualizer/'+str(-1), follow=True)
+        self.assertEqual(response.status_code, 404)
 
 
