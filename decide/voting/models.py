@@ -10,7 +10,7 @@ from base.models import Auth, Key
 
 class Question(models.Model):
     desc = models.TextField()
-    postproc_type=models.IntegerField(choices={(1,'Dhont'),(2,'Borda'),(3,'SaintLague')},default=1)
+    postproc_type=models.IntegerField(choices={(0, "IDENTITY"),(1,'DHONT'),(2,'BORDA'),(3,'SAINTE_LAGUE'),(4, "EQUALITY")},default=1)
 
     def __str__(self):
         return self.desc
@@ -53,8 +53,6 @@ class Voting(models.Model):
         
         print(Voting.objects.filter(url=url))
 
-        if Voting.objects.filter(url=url).exists() and Voting.objects.filter(url=url)[0] != self:
-            raise ValidationError({'url': "The url already exists."})
 
     def save(self, *args, **kwargs):
         try:

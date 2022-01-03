@@ -123,6 +123,7 @@ class BoothView(TemplateView):
             raise Http404
 
         context['KEYBITS'] = settings.KEYBITS
+        context['votacion']= Voting.objects.filter(id=voting_id)[0]
 
         return context
 

@@ -44,6 +44,8 @@ class StoreView(generics.ListAPIView):
         vote = request.data.get('vote')
 
         if not vid or not uid or not vote:
+            print('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+            print(vote)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
         # validating voter
@@ -58,12 +60,10 @@ class StoreView(generics.ListAPIView):
         if perms.status_code == 401:
             return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-        a = vote.get("a")
-        b = vote.get("b")
+        a = vote[:-1]
+        b = vote[:-1]
 
-        defs = { "a": a, "b": b }
-        v, _ = Vote.objects.get_or_create(voting_id=vid, voter_id=uid,
-                                          defaults=defs)
+        v, _ = Vote.objects.get_or_create(voting_id=vid, voter_id=uid)
         v.a = a
         v.b = b
 
