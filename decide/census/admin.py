@@ -9,11 +9,11 @@ def export_census(modeladmin, request, queryset):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="censo.csv"'
     file = csv.writer(response)
-    file.writerow(['Id votante'])
+    file.writerow(['Id votante', 'Id votación'])
     ids = []
     for c in queryset:
-        if c.voter_id not in ids:
-            file.writerow([c.voter_id])
+        #if c.voter_id not in ids:
+            file.writerow([c.voter_id, c.voting_id])
             ids.append(c.voter_id)
 
     return response
