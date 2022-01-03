@@ -8,7 +8,7 @@
 <h2>Debes adjuntar un fichero csv con el formato 'id-votante,id-votacion'</h2>
 <br>
 
-<form action="../../census/importar" method="POST" enctype="multipart/form-data" target="_self">
+<form action="/admin/census/importar" method="POST" enctype="multipart/form-data" target="_self">
     {% csrf_token %}
 
     <p>
