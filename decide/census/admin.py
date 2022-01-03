@@ -1,9 +1,13 @@
 from django.contrib import admin
+from django.shortcuts import render,render_to_response
+
 from .models import Census
 from django.http import HttpResponse
+from . import views
 import csv
 
-
+def import_census(modeladmin,request,queryset):
+    return render(request,'censusImport.html')
 
 def export_census(modeladmin, request, queryset):
     response = HttpResponse(content_type='text/csv')
@@ -23,7 +27,9 @@ class CensusAdmin(admin.ModelAdmin):
     list_filter = ('voting_id', )
 
     search_fields = ('voter_id', )
-    actions = [export_census]
+
+    actions = [import_census,export_census]
 
 
 admin.site.register(Census, CensusAdmin)
+
