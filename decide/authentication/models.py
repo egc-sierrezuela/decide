@@ -8,3 +8,4 @@ class Persona(models.Model):
     sexo = models.CharField(max_length=30, blank=False)
     ip = models.CharField(max_length=200)
     region = models.CharField(max_length=200)
+    edad = models.PositiveSmallIntegerField()

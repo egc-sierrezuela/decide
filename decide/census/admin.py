@@ -24,12 +24,11 @@ class SexCensusFilter(admin.SimpleListFilter):
         if self.value() == "masculino":
             # Para cada censo, busco el user y veo su género. Si el género es masculino
             # entonces añado el c.voting_id en una lista, y después retorno 
-            # aquellos objetos mediante el filtro voting_id__in = lista
+            # aquellos objetos mediante el filtro voter_id__in = lista
             lista_censos_masculinos = []
             for c in queryset:
                 usuario = User.objects.get(id=c.voter_id)
                 persona = usuario.persona
-                print(persona.sexo)
                 if persona.sexo == "masculino":
                     lista_censos_masculinos.append(c.voter_id)
             print(lista_censos_masculinos)
@@ -39,15 +38,63 @@ class SexCensusFilter(admin.SimpleListFilter):
             lista_censos_femeninos = []
             for c in queryset:
                 usuario = User.objects.get(id=c.voter_id)
-                print(usuario)
                 persona = usuario.persona
                 if persona.sexo == "femenino":
                     lista_censos_femeninos.append(c.voter_id)
             return queryset.filter(voter_id__in=lista_censos_femeninos)
 
+class AgeCensusFilter(admin.SimpleListFilter):
+    title = "Filtro por edad"  # a label for our filter
+    parameter_name = 'edad'
+
+    def lookups(self, request, model_admin):
+        # This is where you create filter options; we have two:
+        return [
+            ("18-30", "18 a 30 años"),
+            ("31-50", "31 a 50 años"),
+            ("50+", "Más de 50 años")
+        ]
+
+    def queryset(self, request, queryset):
+        # This is where you process parameters selected by use via filter options:
+        if self.value() == "18-30":
+            # Para cada censo, busco el user y veo su edad. Si la edad está comprendida en el rango
+            # entonces añado el c.voter_id en una lista, y después retorno 
+            # aquellos objetos mediante el filtro voter_id__in = lista
+            lista_censos = []
+            for c in queryset:
+                usuario = User.objects.get(id=c.voter_id)
+                persona = usuario.persona
+                if persona.edad >= 18 and persona.edad <= 30:
+                    lista_censos.append(c.voter_id)
+            print(lista_censos)
+            return queryset.filter(voter_id__in=lista_censos)
+
+        if self.value() == "31-50":
+            lista_censos = []
+            for c in queryset:
+                usuario = User.objects.get(id=c.voter_id)
+                print(usuario)
+                persona = usuario.persona
+                if persona.edad >= 31 and persona.edad <= 50:
+                    lista_censos.append(c.voter_id)
+            return queryset.filter(voter_id__in=lista_censos)
+        
+        if self.value() == "50+":
+            lista_censos = []
+            for c in queryset:
+                usuario = User.objects.get(id=c.voter_id)
+                print(usuario)
+                persona = usuario.persona
+                if persona.edad >50:
+                    lista_censos.append(c.voter_id)
+            return queryset.filter(voter_id__in=lista_censos)
+
+
+
 class CensusAdmin(admin.ModelAdmin):
     list_display = ('voting_id', 'voter_id')
-    list_filter = ('voting_id', SexCensusFilter)
+    list_filter = ('voting_id', SexCensusFilter, AgeCensusFilter)
 
     search_fields = ('voter_id',)
 
