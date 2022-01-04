@@ -51,4 +51,5 @@ class AuthTestSelenium(LiveServerTestCase):
         
         
         print(self.driver.current_url)
+        #Comprueba si redirige a la url correcta al loguearse correctamente
         self.assertTrue(self.driver.current_url==f'{self.live_server_url}/authentication/login-success/')
