@@ -53,3 +53,23 @@ class AuthTestSelenium(LiveServerTestCase):
         print(self.driver.current_url)
         #Comprueba si redirige a la url correcta al loguearse correctamente
         self.assertTrue(self.driver.current_url==f'{self.live_server_url}/authentication/login-success/')
+
+    def test_incorrectLoginUserNotExist(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("UsuarioNoExistente")
+        self.driver.find_element_by_id('id_password').send_keys("UsuarioNoExistente",Keys.ENTER)
+
+        text = "Error: Usuario o contraseña incorrectas."
+        assert (text in self.driver.page_source)
+
+    def test_incorrectLoginPassIncorrect(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("ContraseñaIncorrecta",Keys.ENTER)
+
+        text = "Error: Usuario o contraseña incorrectas."
+        assert (text in self.driver.page_source) 
+
+
