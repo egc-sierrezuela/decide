@@ -10,7 +10,7 @@ from base.models import Auth, Key
 
 class Question(models.Model):
     desc = models.TextField()
-    postproc_type=models.IntegerField(choices={(0, "IDENTITY"),(1,'DHONT'),(2,'BORDA'),(3,'SAINTE_LAGUE'),(4, "EQUALITY")},default=1)
+    type=models.IntegerField(choices={(0, "IDENTITY"),(1,'DHONT'),(2,'BORDA'),(3,'SAINTE_LAGUE'),(4, "EQUALITY")},default=1)
 
     def __str__(self):
         return self.desc
@@ -82,15 +82,20 @@ class Voting(models.Model):
         # gettings votes from store
         votes = mods.get('store', params={'voting_id': self.id}, HTTP_AUTHORIZATION='Token ' + token)
         # anon votes
-        return [[i['a'], i['b']] for i in votes]
+        return votes
 
     def tally_votes(self, token=''):
         '''
         The tally is a shuffle and then a decrypt
         '''
 
-        votes = self.get_votes(token)
-
+        votos  = self.get_votes(token)
+        votes = []
+        for i in votos:
+            aa = i['a'].split(',')
+            bb = i['b'].split(',')
+            for j in range(len(aa)):
+                votes.append([int(aa[j]), int(bb[j]), j, i['question_id']])
         auth = self.auths.first()
         shuffle_url = "/shuffle/{}/".format(self.id)
         decrypt_url = "/decrypt/{}/".format(self.id)
@@ -116,27 +121,37 @@ class Voting(models.Model):
         self.tally = response.json()
         self.save()
 
-        self.do_postproc()
+        tally=self.tally
+        self.tally_votes_masc(token)
+        return 
+
 
     def do_postproc(self):
         tally = self.tally
-        options = self.question.options.all()
+        tallies = ['IDENTITY', 'BORDA', 'HONDT', 'EQUALITY', 'SAINTE_LAGUE']
+        data = []
 
-        opts = []
-        for opt in options:
-            if isinstance(tally, list):
-                votes = tally.count(opt.number)
-            else:
+        for i, q in enumerate(self.question.all()):
+            opciones = q.options.all()
+            opt_count=len(opciones)
+            opts = []
+            for opt in opciones:
                 votes = 0
-            opts.append({
-                'option': opt.option,
-                'number': opt.number,
-                'votes': votes
-            })
+                for dicc in tally:
+                    indice = opt.number
+                    pos = dicc.get(str(indice))
 
-        data = { 'type': 'IDENTITY', 'options': opts }
+                    if pos!=None and pos[1]==q.id:
+                        votes = votes + 1
+                opts.append({
+                    'question': opt.question.desc,
+                    'question_id':opt.question.id,
+                    'option': opt.option,
+                    'number': opt.number,
+                    'votes': votes
+                })
+            data.append( { 'type': tallies[q.type],'options': opts})
         postp = mods.post('postproc', json=data)
-
         self.postproc = postp
         self.save()
 
