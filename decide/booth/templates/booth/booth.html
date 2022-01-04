@@ -27,33 +27,36 @@
             [[ alertMsg ]]
         </b-alert>
         <div class="voting-externa">
-           
-        <div class="voting">
-            <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
-
-            <!-- Voting -->
-            <div v-if="!signup">
-                <h2>[[ voting.question.desc ]]</h2>
-                <b-form-group v-for="opt in voting.question.options" :key="opt.number">
-                    <b-form-radio v-model="selected"
-                                  :id="'q' + opt.number"
-                                  name="question"
-                                  :value="opt.number">
-                        [[ opt.option ]]
-                    </b-form-radio>
-                </b-form-group>
-
+            <div class="voting">
+                <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
+    
+                <!-- Voting -->
+                <div v-if="!sifgnup">
+                <form id="idcabina" action="" method>
+                {% for q in votacion.question.all %}
+                <fieldset id="{{q.id}}">
+                    <h2>{{ q.desc }}</h2>
+                    {% for opt in q.options.all %}
+                       <label>{{opt.option}} <input type="checkbox" class="radio"
+                        v-model="selected" name="{{q.id}}" value="{{q.id}}-{{opt.number}}" ></label> <br>
+                    {% endfor %}
+                </fieldset>
+                {% endfor %}
+                <br>
                 <b-button id="voting_button" type="button" variant="primary" v-on:click="decideSend">
                     {% trans "Vote" %}
                 </b-button>
                 <b-button id="return_button" type="button" variant="primary" href="{% url "pagina-inicio" %}">Volver</b-button>
-
-                <br>
-                    <p class="card-text mt-2">
-                    Número de votos totales computados en esta votacion: {{ votos }}
-                    </p>
-            </div> 
-        </div>
+                <b-button id="rankSendButton" :disabled="voteSuccess" v-if="selected.length ==0" class="mb-5 col-6 offset-3 col-sm-4 offset-sm-4 col-xl-2 offset-xl-5 btn-white" v-bind:class="{dp: csspd, trit: csstrit}" block type="button" variant="primary" size="lg" href="#" v-on:click="decideSend">
+                    {% trans "Enviar" %}
+                </b-button>
+                    <br>
+                        <p class="card-text mt-2">
+                        Número de votos totales computados en esta votacion: {{ votos }}
+                        </p>
+                </form>
+                </div> 
+            </div>
     </div>
 </div>
 
@@ -183,27 +186,38 @@
                     this.signup = true;
                 },
                 decideEncrypt() {
-                    var bigmsg = BigInt.fromJSONObject(this.selected.toString());
-                    var cipher = ElGamal.encrypt(this.bigpk, bigmsg);
-                    return cipher;
-                },
-                decideSend(evt) {
-                    evt.preventDefault();
-                    var v = this.decideEncrypt();
-                    var data = {
-                        vote: {a: v.alpha.toString(), b: v.beta.toString()},
-                        voting: this.voting.id,
-                        voter: this.user.id,
-                        token: this.token
+                    var cipher = [];
+                    if (this.selected != []){
+                        for(let i =0; i<this.selected.length;i++){
+                            var voto = this.selected[i];
+                            var bigmsg = BigInt.fromJSONObject(voto.toString());
+                            var element = ElGamal.encrypt(this.bigpk, bigmsg);
+                            cipher.push(element);
+                        }
                     }
-                    this.postData("{% url "gateway" "store" "/" %}", data)
-                        .then(data => {
-                            this.showAlert("success", '{% trans "Conglatulations. Your vote has been sent" %}');
-                        })
-                        .catch(error => {
-                            this.showAlert("danger", '{% trans "Error: " %}' + error);
-                        });
-                },
+                    return cipher;
+                    },
+                    decideSend(evt) {
+                        evt.preventDefault();
+                        var v = this.decideEncrypt();
+                        var votes = [];
+                        for(let i =0; i<v.length;i++){
+                            votes.push({a: v[i].alpha.toString(), b: v[i].beta.toString()});
+                        }
+                        var data = {
+                            vote: votes,
+                            voting: this.voting.id,
+                            voter: this.user.id,
+                            token: this.token
+                        }
+                        this.postData("{% url "gateway" "store" "/" %}", data)
+                            .then(data => {
+                                this.showAlert("success", '{% trans "Conglatulations. Your vote has been sent" %}');
+                            })
+                            .catch(error => {
+                                this.showAlert("danger", '{% trans "Error: " %}' + error);
+                            });
+                    },
                 showAlert(lvl, msg) {
                     this.alertLvl = lvl;
                     this.alertMsg = msg;
