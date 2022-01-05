@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 import django_filters.rest_framework
@@ -20,7 +21,6 @@ class StoreView(generics.ListAPIView):
     def get(self, request):
         self.permission_classes = (UserIsStaff,)
         self.check_permissions(request)
-        print(type(request))
         return super().get(request)
 
     def post(self, request):
@@ -45,8 +45,6 @@ class StoreView(generics.ListAPIView):
         vote = request.data.get('vote')
 
         if not vid or not uid or not vote:
-            print('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-            print(vote)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
         # validating voter
@@ -60,9 +58,16 @@ class StoreView(generics.ListAPIView):
         perms = mods.get('census/{}'.format(vid), params={'voter_id': uid}, response=True)
         if perms.status_code == 401:
             return Response({}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        num_preguntas=len(voting[0]['question'])
+        lista_a=[]
+        lista_b=[]
+        for i in range(0,num_preguntas):
+            lista_a.append(vote[i]["a"])
+            lista_b.append(vote[i]["b"])
 
-        a = vote[:-1]
-        b = vote[:-1]
+        a = lista_a
+        b = lista_b    
 
         v, _ = Vote.objects.get_or_create(voting_id=vid, voter_id=uid)
         v.a = a

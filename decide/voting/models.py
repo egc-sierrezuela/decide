@@ -89,22 +89,22 @@ class Voting(models.Model):
         The tally is a shuffle and then a decrypt
         '''
 
-        votos  = self.get_votes(token)
-        votes = []
-        for i in votos:
-            aa = i['a'].split(',')
-            bb = i['b'].split(',')
-            for j in range(len(aa)):
-                aaj=aa[j].split(':')[1].replace("'","").replace("]","").replace("}","").strip()
-                bbj=bb[j].split(':')[1].replace("'","").replace("]","").replace("}","").strip()
-                votes.append([int(aaj), int(bbj), j])
+        votes  = self.get_votes(token)
+        votos = []
+        for i in votes:
+            if type(i)=='dict':
+                aa=i['a'].replace("[","").replace("]","").replace("'","").replace(" ","").split(",")
+                bb=i['b'].replace("[","").replace("]","").replace("'","").replace(" ","").split(",")
+                for j in range(0,len(aa)):
+                    votos.append([int(aa[j]), int(bb[j]), j])
+
         auth = self.auths.first()
         shuffle_url = "/shuffle/{}/".format(self.id)
         decrypt_url = "/decrypt/{}/".format(self.id)
         auths = [{"name": a.name, "url": a.url} for a in self.auths.all()]
 
         # first, we do the shuffle
-        data = { "msgs": votes }
+        data = { "msgs": votos }
         response = mods.post('mixnet', entry_point=shuffle_url, baseurl=auth.url, json=data,
                 response=True)
         if response.status_code != 200:
