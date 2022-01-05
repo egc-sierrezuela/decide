@@ -82,13 +82,13 @@ class AuthTestSelenium(LiveServerTestCase):
         self.driver.find_element_by_id('id_username').send_keys("pepe1")
         self.driver.find_element_by_id('id_email').send_keys("pepe@a.a")
         Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
         self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
 
         #self.driver.find_element_by_class_name('btn').click()
         
         # Comprueba si redirige a la url correcta al loguearse correctamente
         self.driver.implicitly_wait(2)
-        print(self.driver.current_url+"?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????")
         self.assertTrue(self.driver.current_url==f'{self.live_server_url}/authentication/login-success/')
         
         # Comprueba que el mensaje es el correcto
@@ -103,9 +103,25 @@ class AuthTestSelenium(LiveServerTestCase):
         self.driver.find_element_by_id('id_username').send_keys("admin") # Ya existente en la base de datos
         self.driver.find_element_by_id('id_email').send_keys("admin@a.a")
         Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
         self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
 
         
         # Comprueba que el mensaje es el correcto
         text = "Error: Usuario ya existente."
         assert (text in self.driver.page_source)
+
+    def test_incorretRegisterEmailAlreadyRegistered(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+        
+        self.driver.find_element_by_id('id_username').send_keys("antonio") 
+        self.driver.find_element_by_id('id_email').send_keys("pepe@a.a") # Ya existente en la base de datos
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
+        self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
+
+        
+        # Comprueba que el mensaje es el correcto
+        text = "Email exists"
+        assert (text in self.driver.page_source)  
