@@ -9,39 +9,49 @@ from django.contrib.auth.models import User
 
 
 class SexCensusFilter(admin.SimpleListFilter):
-    title = "Filtro por género"  # a label for our filter
-    parameter_name = 'genero'
+    title = "Filtro por sexo"  # a label for our filter
+    parameter_name = 'sexo'
 
     def lookups(self, request, model_admin):
         # This is where you create filter options; we have two:
         return [
-            ("masculino", "Masculino"),
-            ("femenino", "Femenino"),
+            ("hombre", "Hombre"),
+            ("mujer", "Mujer"),
+            ("otro", "Otro")
         ]
 
     def queryset(self, request, queryset):
         # This is where you process parameters selected by use via filter options:
-        if self.value() == "masculino":
+        if self.value() == "hombre":
             # Para cada censo, busco el user y veo su género. Si el género es masculino
             # entonces añado el c.voting_id en una lista, y después retorno 
             # aquellos objetos mediante el filtro voter_id__in = lista
-            lista_censos_masculinos = []
+            lista_censos_hombres = []
             for c in queryset:
                 usuario = User.objects.get(id=c.voter_id)
                 persona = usuario.persona
-                if persona.sexo == "masculino":
-                    lista_censos_masculinos.append(c.voter_id)
-            print(lista_censos_masculinos)
-            return queryset.filter(voter_id__in=lista_censos_masculinos)
+                if persona.sexo == "hombre":
+                    lista_censos_hombres.append(c.voter_id)
+            return queryset.filter(voter_id__in=lista_censos_hombres)
 
-        if self.value() == "femenino":
-            lista_censos_femeninos = []
+        if self.value() == "mujer":
+            lista_censos_mujeres = []
             for c in queryset:
                 usuario = User.objects.get(id=c.voter_id)
                 persona = usuario.persona
-                if persona.sexo == "femenino":
-                    lista_censos_femeninos.append(c.voter_id)
-            return queryset.filter(voter_id__in=lista_censos_femeninos)
+                if persona.sexo == "mujer":
+                    lista_censos_mujeres.append(c.voter_id)
+            return queryset.filter(voter_id__in=lista_censos_mujeres)
+
+        if self.value() == "otro":
+            lista_censos_otro = []
+            for c in queryset:
+                usuario = User.objects.get(id=c.voter_id)
+                persona = usuario.persona
+                if persona.sexo == "otro":
+                    lista_censos_otro.append(c.voter_id)
+            return queryset.filter(voter_id__in=lista_censos_otro)
+
 
 class AgeCensusFilter(admin.SimpleListFilter):
     title = "Filtro por edad"  # a label for our filter
