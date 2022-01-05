@@ -15,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from django.test import LiveServerTestCase
 from base.tests import BaseTestCase
+from selenium.webdriver.support.ui import Select
 
 from base import mods
 
@@ -76,19 +77,23 @@ class AuthTestSelenium(LiveServerTestCase):
         self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
         self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
         
-        self.driver.find_element_by_id('id_username').send_keys("pepe")
+    
+        
+        self.driver.find_element_by_id('id_username').send_keys("pepe1")
         self.driver.find_element_by_id('id_email').send_keys("pepe@a.a")
-        self.driver.find_element_by_id('id_password').send_keys("contraseña")
-        self.driver.find_element_by_id('id_sexo').select_by_visible_text('Hombre')
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
 
-        self.driver.find_element_by_class_name('btn').click()
+        #self.driver.find_element_by_class_name('btn').click()
         
         # Comprueba si redirige a la url correcta al loguearse correctamente
+        self.driver.implicitly_wait(2)
+        print(self.driver.current_url+"?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????")
         self.assertTrue(self.driver.current_url==f'{self.live_server_url}/authentication/login-success/')
         
         # Comprueba que el mensaje es el correcto
-        text = "Has iniciado sesion con exito. Bienvenido, pepe."
-        assert (text in self.drive.page_source)
+        text = "Has iniciado sesion con exito. Bienvenido, pepe1."
+        assert (text in self.driver.page_source)
 
     
     def test_incorretRegisterUserAlreadyRegistered(self):
@@ -97,11 +102,10 @@ class AuthTestSelenium(LiveServerTestCase):
         
         self.driver.find_element_by_id('id_username').send_keys("admin") # Ya existente en la base de datos
         self.driver.find_element_by_id('id_email').send_keys("admin@a.a")
-        self.driver.find_element_by_id('id_password').send_keys("contraseña")
-        self.driver.find_element_by_id('id_sexo').select_by_visible_text('Hombre')
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
 
-        self.driver.find_element_by_class_name('btn').click()
         
         # Comprueba que el mensaje es el correcto
         text = "Error: Usuario ya existente."
-        assert (text in self.drive.page_source)
+        assert (text in self.driver.page_source)
