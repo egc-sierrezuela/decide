@@ -95,7 +95,9 @@ class Voting(models.Model):
             aa = i['a'].split(',')
             bb = i['b'].split(',')
             for j in range(len(aa)):
-                votes.append([int(aa[j]), int(bb[j]), j, i['question_id']])
+                aaj=aa[j].split(':')[1].replace("'","").replace("]","").replace("}","").strip()
+                bbj=bb[j].split(':')[1].replace("'","").replace("]","").replace("}","").strip()
+                votes.append([int(aaj), int(bbj), j])
         auth = self.auths.first()
         shuffle_url = "/shuffle/{}/".format(self.id)
         decrypt_url = "/decrypt/{}/".format(self.id)
@@ -122,8 +124,7 @@ class Voting(models.Model):
         self.save()
 
         tally=self.tally
-        self.tally_votes_masc(token)
-        return 
+        return tally
 
 
     def do_postproc(self):

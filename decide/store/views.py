@@ -20,6 +20,7 @@ class StoreView(generics.ListAPIView):
     def get(self, request):
         self.permission_classes = (UserIsStaff,)
         self.check_permissions(request)
+        print(type(request))
         return super().get(request)
 
     def post(self, request):
