@@ -7,6 +7,14 @@ from rest_framework.authtoken.models import Token
 
 from .forms import RegisterForm
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
+from base.tests import BaseTestCase
 
 from base import mods
 
@@ -51,6 +59,9 @@ class AuthTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         user = response.json()
+
+        self.assertEqual(user['id'], 17)
+
         self.assertEqual(user['username'], 'voter1')
 
     def test_getuser_invented_token(self):
@@ -245,4 +256,4 @@ class AuthPageTextCase(TestCase):
 
         self.assertEquals(response.status_code,401)
 
-        
+      
