@@ -33,6 +33,7 @@ class AuthTestSelenium(LiveServerTestCase):
 
         u2 = User(username='pepe')
         u2.set_password('pepe')
+        u2.email="pepe@a.a"
         u2.save()
 
         super().setUp()            
@@ -80,7 +81,7 @@ class AuthTestSelenium(LiveServerTestCase):
     
         
         self.driver.find_element_by_id('id_username').send_keys("pepe1")
-        self.driver.find_element_by_id('id_email').send_keys("pepe@a.a")
+        self.driver.find_element_by_id('id_email').send_keys("compaferdebuggeaconerroresdeldecide@a.a")
         Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
         self.driver.find_element_by_id('id_edad').send_keys("12")
         self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)

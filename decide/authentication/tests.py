@@ -60,7 +60,7 @@ class AuthTestCase(APITestCase):
 
         user = response.json()
 
-        self.assertEqual(user['id'], 17)
+        self.assertEqual(user['id'], 20)
 
         self.assertEqual(user['username'], 'voter1')
 
