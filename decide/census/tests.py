@@ -99,7 +99,7 @@ class ExportCensus(StaticLiveServerTestCase):
     def test_export_census_positive(self):
         #Test name: exportar_censo
         #Step # | name | target | value
-        1 | open | /admin/ | 
+        #1 | open | /admin/ | 
         self.driver.get(f'{self.live_server_url}/admin/')
         self.driver.find_element_by_id('id_username').send_keys("adminprueba")
         self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
