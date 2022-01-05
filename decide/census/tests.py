@@ -2,10 +2,13 @@ import random
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
-
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 from .models import Census
+from selenium.webdriver.common.keys import Keys
 from base import mods
 from base.tests import BaseTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
 class CensusTestCase(BaseTestCase):
@@ -73,3 +76,46 @@ class CensusTestCase(BaseTestCase):
         response = self.client.delete('/census/{}/'.format(1), data, format='json')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(0, Census.objects.count())
+
+    
+class ExportCensus(StaticLiveServerTestCase):
+
+    def setUp(self):
+        self.base = BaseTestCase()
+        self.base.setUp()
+        options = webdriver.ChromeOptions()
+        options.headless = True
+        self.driver = webdriver.Chrome(options=options)
+        self.vars = {}
+
+    def tearDown(self):
+        super().tearDown()
+        self.driver.quit()
+
+        self.base.tearDown()
+
+    def test_export_census(self):
+        # Test name: exportar_censo
+        # Step # | name | target | value
+        # 1 | open | /admin/ | 
+        self.driver.get(self.driver.get(f'{self.live_server_url}/admin/'))
+        self.driver.find_element_by_id('id_username').send_keys("admin")
+        self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
+
+        # 2 | setWindowSize | 821x694 | 
+        self.driver.set_window_size(821, 694)
+        # 3 | click | linkText=Censuss | 
+        self.driver.find_element(By.LINK_TEXT, "Censuss").click()
+        # 4 | click | id=action-toggle | 
+        self.driver.find_element(By.ID, "action-toggle").click()
+        # 5 | select | name=action | label=Export census
+        dropdown = self.driver.find_element(By.NAME, "action")
+        dropdown.find_element(By.XPATH, "//option[. = 'Export census']").click()
+        # 6 | click | css=option:nth-child(3) | 
+        self.driver.find_element(By.CSS_SELECTOR, "option:nth-child(3)").click()
+        # 7 | click | name=index | 
+        self.driver.find_element(By.NAME, "index").click()
+        self.driver.navigate().refresh()
+        mensaje = self.driver.find_element(By.CLASS_NAME, "success").text
+
+        self.assertEquals(mensaje, 'Exportación realizada con éxito')
