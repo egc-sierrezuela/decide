@@ -1,5 +1,5 @@
-"""decide URL Configuration
 
+"""decide URL Configuration
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
 Examples:
@@ -25,9 +25,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('doc/', schema_view),
     path('gateway/', include('gateway.urls')),
+    path('social-auth/', include('social_django.urls', namespace="social")),
 ]
 
 for module in settings.MODULES:
     urlpatterns += [
         path('{}/'.format(module), include('{}.urls'.format(module)))
     ]
+    
