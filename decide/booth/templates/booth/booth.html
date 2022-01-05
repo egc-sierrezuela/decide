@@ -6,6 +6,7 @@
          href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+    <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
 {% endblock %}
 
 {% block content %}
@@ -32,7 +33,7 @@
     
                 <!-- Voting -->
                 <div v-if="!sifgnup">
-                <form id="idcabina" action="" method>
+                <form id="idcabina" action="" method> 
                 {% for q in votacion.question.all %}
                 <fieldset id="{{q.id}}">
                     <h2>{{ q.desc }}</h2>
