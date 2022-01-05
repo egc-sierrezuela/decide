@@ -96,10 +96,10 @@ class ExportCensus(StaticLiveServerTestCase):
 
         self.base.tearDown()
 
-    def test_export_census(self):
-        # Test name: exportar_censo
-        # Step # | name | target | value
-        # 1 | open | /admin/ | 
+    def test_export_census_positive(self):
+        #Test name: exportar_censo
+        #Step # | name | target | value
+        1 | open | /admin/ | 
         self.driver.get(f'{self.live_server_url}/admin/')
         self.driver.find_element_by_id('id_username').send_keys("adminprueba")
         self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
@@ -141,3 +141,43 @@ class ExportCensus(StaticLiveServerTestCase):
         mensaje = self.driver.find_element(By.CLASS_NAME, "success").text
 
         self.assertEquals(mensaje, 'Exportación realizada con éxito')
+
+    def test_export_census_negative(self):
+        self.driver.get(f'{self.live_server_url}/admin/')
+        self.driver.find_element_by_id('id_username').send_keys("adminprueba")
+        self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
+
+        
+        # 2 | setWindowSize | 821x694 | 
+        self.driver.set_window_size(821, 694)
+
+        # 3 | click | linkText=Censuss | 
+        self.driver.find_element(By.LINK_TEXT, "Censuss").click()
+
+        # 4 | click | id=action-toggle | 
+        #self.driver.find_element(By.ID, "action-toggle").click()
+
+        # 5 | select | name=action | label=Export census
+        dropdown = self.driver.find_element(By.NAME, "action")
+        dropdown.find_element(By.XPATH, "//option[. = 'Export census']").click()
+
+        
+        element = self.driver.find_element(By.NAME, "action")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).click_and_hold().perform()
+
+        element = self.driver.find_element(By.NAME, "action")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+
+        element = self.driver.find_element(By.NAME, "action")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).release().perform()
+
+        # 6 | click | name=index | 
+        self.driver.find_element(By.NAME, "index").click()
+
+        #Si la exportación se ha realizado, debe aparecer un mensaje
+        mensaje = self.driver.find_element(By.CLASS_NAME, "warning").text
+
+        self.assertEquals(mensaje, 'Items must be selected in order to perform actions on them. No items have been changed.')
