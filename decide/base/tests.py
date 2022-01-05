@@ -20,10 +20,10 @@ class BaseTestCase(APITestCase):
         user_admin.set_password('qwerty')
         user_admin.save()
 
-        user1=User(username='adminprueba')
-        user1.set_password('qwerty')
-        user1.is_superuser=True
-        user1.save()
+        user_adminprueba=User(username='adminprueba',is_staff=True)
+        user_adminprueba.set_password('qwerty')
+        user_adminprueba.is_superuser=True
+        user_adminprueba.save()
 
     def tearDown(self):
         self.client = None
