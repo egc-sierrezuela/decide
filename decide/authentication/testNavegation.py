@@ -125,4 +125,109 @@ class AuthTestSelenium(LiveServerTestCase):
         
         # Comprueba que el mensaje es el correcto
         text = "Email exists"
-        assert (text in self.driver.page_source)  
+        assert (text in self.driver.page_source) 
+
+    def test_incorretRegisterEmailBadFormat1(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+
+        self.driver.find_element_by_id('id_username').send_keys("antonio") 
+        self.driver.find_element_by_id('id_email').send_keys("a")
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
+        self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
+
+
+        # Comprueba que el mensaje es el correcto
+
+        self.driver.implicitly_wait(10)
+
+        email_input = self.driver.find_element_by_id('id_email')
+        validation_message = email_input.get_attribute("validationMessage")
+
+        alert = 'Incluye un signo "@" en la dirección de correo electrónico. La dirección "a" no incluye el signo "@".'
+        assert (alert==validation_message)
+
+    def test_incorretRegisterEmailBadFormat2(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+
+        self.driver.find_element_by_id('id_username').send_keys("antonio") 
+        self.driver.find_element_by_id('id_email').send_keys("a@")
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
+        self.driver.find_element_by_id('id_password').send_keys("",Keys.ENTER)
+
+
+        # Comprueba que el mensaje es el correcto
+
+        self.driver.implicitly_wait(10)
+
+        email_input = self.driver.find_element_by_id('id_email')
+        validation_message = email_input.get_attribute("validationMessage")
+
+        alert = 'Introduce texto detrás del signo "a". La dirección "a@" está incompleta.'
+        assert (alert==validation_message)          
+
+    def test_incorretRegisterEmailBadFormat2(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+
+        self.driver.find_element_by_id('id_username').send_keys("antonio") 
+        self.driver.find_element_by_id('id_email').send_keys("a@.")
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
+        self.driver.find_element_by_id('id_password').send_keys("",Keys.ENTER)
+
+
+        # Comprueba que el mensaje es el correcto
+
+        self.driver.implicitly_wait(10)
+
+        email_input = self.driver.find_element_by_id('id_email')
+        validation_message = email_input.get_attribute("validationMessage")
+
+        alert = 'El signo "." está colocado en una posición incorrecta en la dirección ".".'
+        assert (alert==validation_message)          
+
+    def test_incorretRegisterUserEmpty(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+
+        self.driver.find_element_by_id('id_username').send_keys("") 
+        self.driver.find_element_by_id('id_email').send_keys("a")
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
+        self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
+
+
+        # Comprueba que el mensaje es el correcto
+
+        self.driver.implicitly_wait(10)
+
+        user_input = self.driver.find_element_by_id('id_username')
+        validation_message = user_input.get_attribute("validationMessage")
+
+        alert = 'Completa este campo'
+        assert (alert==validation_message)            
+
+    def test_incorretRegisterEmailEmpty(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+
+        self.driver.find_element_by_id('id_username').send_keys("antonio") 
+        self.driver.find_element_by_id('id_email').send_keys("")
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
+        self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
+
+
+        # Comprueba que el mensaje es el correcto
+
+        self.driver.implicitly_wait(10)
+
+        email_input = self.driver.find_element_by_id('id_email')
+        validation_message = email_input.get_attribute("validationMessage")
+
+        alert = 'Completa este campo'
+        assert (alert==validation_message)
