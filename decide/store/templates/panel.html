@@ -23,8 +23,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>   
 
-<canvas id="chart" width="500" height="500"></canvas>
-<canvas id="pie-chart" width="800" height="450"></canvas>
+<canvas id="chart" width="50" height="50"></canvas>
+<canvas id="pie-chart" width="80" height="45"></canvas>
+<canvas id="bar-chart-horizontal" width="80" height="45"></canvas>
 
 <script>
 
@@ -53,7 +54,7 @@ new Chart(document.getElementById("pie-chart"), {
     data: {
       labels: ["Menores de 18", "Entre 18 y 30", "Entre 30 y 70", "Mayores de 70"],
       datasets: [{
-        label: "edades",
+        label: "personas",
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
         data: [{{menores}},{{jovenes}},{{veteranos}},{{ancianos}}]
       }]
@@ -65,6 +66,28 @@ new Chart(document.getElementById("pie-chart"), {
       }
     }
 });
+
+new Chart(document.getElementById("bar-chart-horizontal"), {
+  type: 'horizontalBar',
+  data: {
+    labels: ["Europa", "Asia", "Africa", "Latin America", "North America"],
+    datasets: [
+      {
+        label: "Personas",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+        data: [{{europeos}},{{asiaticos}},{{africanos}},{{latinoamericanos}},{{norteamericanos}}]
+      }
+    ]
+  },
+  options: {
+    legend: { display: false },
+    title: {
+      display: true,
+      text: 'Regiones de los votantes'
+    }
+  }
+});
+
 
 
 </script>   
