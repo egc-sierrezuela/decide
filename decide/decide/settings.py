@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
-    'gateway',
-    'captcha',
+    'gateway'
 ]
 
 REST_FRAMEWORK = {
@@ -227,14 +226,4 @@ INSTALLED_APPS = INSTALLED_APPS + MODULES
 
 import django_heroku
 django_heroku.settings(locals())
-
-#Necesario para realizar el captcha
-
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
-
-ACCOUNT_LOGOUT_ON_GET = True
-
-RECAPTCHA_PUBLIC_KEY = 'clave publica '
-RECAPTCHA_PRIVATE_KEY = 'clave privada'
-NOCAPTCHA = True
 
