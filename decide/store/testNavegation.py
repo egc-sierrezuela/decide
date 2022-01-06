@@ -38,7 +38,14 @@ class StoreTestSelenium(LiveServerTestCase):
         u1.set_password('pepe')
         u1.email="pepe@a.a"
         u1.is_superuser=True
+        u1.pk=9999
         u1.save()
+
+        u2 = User(username='pepee')
+        u2.set_password('pepee')
+        u2.email="pepee@a.a"
+        u2.pk=9998
+        u2.save()
 
         p1 = Persona()
         p1.usuario=u1
@@ -57,6 +64,12 @@ class StoreTestSelenium(LiveServerTestCase):
         v1.question=q1
         v1.name = "Prueba"
         v1.save()
+
+        v2 = Voting()
+        v2.pk=2
+        v2.question=q1
+        v2.name = "Prueba"
+        v2.save()
    
         c1=Census(voting_id=v1.id,voter_id=u1.id)
         c1.save()
@@ -82,5 +95,107 @@ class StoreTestSelenium(LiveServerTestCase):
         assert (text in self.driver.page_source)
 
 
+    def test_VisualizerCorrectPanelSexo(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("pepe",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/1/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/1/')
+
+        text = "Sexo: hombre"
+        assert (text in self.driver.page_source)
+
+        
+
+    def test_VisualizerCorrectPanelIP(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("pepe",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/1/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/1/')
+
+        text = "IP: 121.12.1.1"
+        assert (text in self.driver.page_source)
+
+
+    def test_VisualizerCorrectPanelUser(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("pepe",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/1/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/1/')
+        text = "User: pepe"
+        assert (text in self.driver.page_source)
+
+
+    def test_VisualizerCorrectPanelID(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("pepe",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/1/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/1/')
+
+        text = "ID: 9999"
+        assert (text in self.driver.page_source)
+
+
+    def test_VisualizerCorrectPanelCorreo(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("pepe",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/1/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/1/')
+
+        text = "Correo: pepe@a.a"
+        assert (text in self.driver.page_source)
+
+
+    def test_VisualizerCorrectPanelRegion(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("pepe",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/1/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/1/')
+
+        text = "Region: ES"
+        assert (text in self.driver.page_source)
+
     
 
+    def test_VisualizerCorrectPanelNotCensus(self):
+
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepe")
+        self.driver.find_element_by_id('id_password').send_keys("pepe",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/2/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/2/')
+
+        text = "No hay usuarios registrados aptos para esa votacion"
+        assert (text in self.driver.page_source)   
+
+    def test_VisualizerCorrectPanelAdminRequired(self):
+
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')               
+        self.driver.get(f'{self.live_server_url}/authentication/login-alt/')
+        self.driver.find_element_by_id('id_username').send_keys("pepee")
+        self.driver.find_element_by_id('id_password').send_keys("pepee",Keys.ENTER)
+
+        self.driver.get(f'{self.live_server_url}/store/2/')
+        self.assertTrue(self.driver.current_url==f'{self.live_server_url}/store/2/')
+
+        text = "Error: Debe iniciar sesion como admin"
+        assert (text in self.driver.page_source)   
