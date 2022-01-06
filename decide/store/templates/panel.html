@@ -15,6 +15,8 @@
 <h5>Correo: {{i.usuario.email}}</h5>
 <h5>IP: {{i.ip}}</h5>
 <h5>Region: {{i.region}}</h5>
+<br></br>
+
 {% empty %}
 <h2>No hay usuarios registrados aptos para esa votacion</h2>
 {% endfor %}
@@ -22,19 +24,18 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>   
 
 <canvas id="chart" width="500" height="500"></canvas>
+<canvas id="pie-chart" width="800" height="450"></canvas>
 
 <script>
-let ctx = document.getElementById("chart").getContext("2d");
 
-let chart = new Chart(ctx, {
+new Chart(document.getElementById("chart").getContext("2d"), {
   type: "bar",
   data: {
      labels: ["Mujeres", "Hombres", "Otros"],
      datasets: [
         {
           label: "Número de personas",
-          backgroundColor: "#79AEC8",
-          borderColor: "#417690",
+          backgroundColor: ["#8e5ea2","#3e95cd","#3cba9f"],
           data: [{{n_mujeres}}, {{n_hombres}}, {{n_otros}}]
         }
      ]
@@ -46,6 +47,25 @@ let chart = new Chart(ctx, {
      }
   }
 });
+
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Menores de 18", "Entre 18 y 30", "Entre 30 y 70", "Mayores de 70"],
+      datasets: [{
+        label: "edades",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
+        data: [{{menores}},{{jovenes}},{{veteranos}},{{ancianos}}]
+      }]
+    },
+    options: {
+      title: {
+        text: 'Rango de edades de los votantes',
+        display: true
+      }
+    }
+});
+
 
 </script>   
 

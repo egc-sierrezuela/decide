@@ -97,6 +97,7 @@ class PanelView(TemplateView):
         n_hombres = 0
         n_mujeres = 0
         n_otros = 0
+
         for p in personas:
             if p.sexo == "hombre" or p.sexo == "Hombre":
                 n_hombres+=1
@@ -105,16 +106,34 @@ class PanelView(TemplateView):
             else:
                 n_otros+=1
 
-        sexos = ["Mujeres","Hombres","Otros"]
-        datos_sexo = [n_mujeres,n_hombres,n_otros]
+        menores = 0
+        jovenes = 0
+        veteranos = 0
+        ancianos = 0
+
+        for p in personas:
+            if p.edad < 18:
+                menores+=1
+            elif p.edad>18 and p.edad<=30:
+                jovenes+=1
+            elif p.edad>30 and p.edad<=70:
+                veteranos+=1
+            elif p.edad>70:
+                ancianos+=1
+        
 
         context['id']=vid
         context['vot']=lista
         context['pers']= personas
+        
         context['n_hombres']=n_hombres
         context['n_mujeres']=n_mujeres
         context['n_otros']=n_otros
-        
+
+        context['menores']=menores
+        context['jovenes']=jovenes
+        context['veteranos']=veteranos
+        context['ancianos']=ancianos
 
         return context
 
