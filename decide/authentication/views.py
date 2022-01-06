@@ -65,7 +65,7 @@ class RegisterViewAPI(APIView):
 class RegisterView(View):
     def get(get, request):
         if(request.user.is_authenticated):
-            return HttpResponse('Debe ingresar como usuario anonimo',status=401)
+            return HttpResponse('Debe ingresar como usuario anonimo',status=403)
         form = RegisterForm()
         params = {'form':form}
         return render(request,'register.html',params)
@@ -79,6 +79,7 @@ class RegisterView(View):
         email = form.cleaned_data['email']
         pwd = form.cleaned_data['password']
         sex= form.cleaned_data['sexo']
+        edad= form.cleaned_data['edad']
         
         ip, is_routable = get_client_ip(request)
         if ip is None:
@@ -93,7 +94,7 @@ class RegisterView(View):
             user.email = email
             user.set_password(pwd)
             user.save()
-            persona = Persona(usuario = user, sexo=sex, ip=ip, region=region)
+            persona = Persona(usuario = user, sexo=sex, ip=ip, edad=edad, region=region)
             persona.save()
             login(request,user, backend='authentication.backends.EmailOrUsernameModelBackend')
         except IntegrityError:
@@ -104,7 +105,7 @@ class RegisterView(View):
 class LoginView(View):
     def get(get, request):
         if(request.user.is_authenticated):
-            return HttpResponse('Debe ingresar como usuario anonimo',status=401)
+            return HttpResponse('Debe ingresar como usuario anonimo',status=403)
         form = AuthenticationForm()
         params = {'form':form}
         return render(request,'login.html',params)
