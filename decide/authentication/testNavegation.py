@@ -231,3 +231,46 @@ class AuthTestSelenium(LiveServerTestCase):
 
         alert = 'Completa este campo'
         assert (alert==validation_message)
+
+
+    def test_incorretRegisterPasswordEmpty(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+
+        self.driver.find_element_by_id('id_username').send_keys("antonio") 
+        self.driver.find_element_by_id('id_email').send_keys("pepe@gmail.com")
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("12")
+        self.driver.find_element_by_id('id_password').send_keys("",Keys.ENTER)
+
+
+        # Comprueba que el mensaje es el correcto
+
+        self.driver.implicitly_wait(10)
+
+        pass_input = self.driver.find_element_by_id('id_password')
+        validation_message = pass_input.get_attribute("validationMessage")
+
+        alert = 'Completa este campo'
+        assert (alert==validation_message)   
+
+    def test_incorretRegisterAgeEmpty(self):
+        self.driver.get(f'{self.live_server_url}/authentication/logout-alt/')
+        self.driver.get(f'{self.live_server_url}/authentication/register-alt/')
+
+        self.driver.find_element_by_id('id_username').send_keys("antonio") 
+        self.driver.find_element_by_id('id_email').send_keys("pepe@gmail.com")
+        Select(self.driver.find_element_by_id('id_sexo')).select_by_visible_text('Hombre')
+        self.driver.find_element_by_id('id_edad').send_keys("")
+        self.driver.find_element_by_id('id_password').send_keys("contraseña",Keys.ENTER)
+
+
+        # Comprueba que el mensaje es el correcto
+
+        self.driver.implicitly_wait(10)
+
+        edad_input = self.driver.find_element_by_id('id_edad')
+        validation_message = edad_input.get_attribute("validationMessage")
+
+        alert = 'Completa este campo'
+        assert (alert==validation_message)
