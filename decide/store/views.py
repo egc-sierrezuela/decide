@@ -93,9 +93,29 @@ class PanelView(TemplateView):
         for i in lista:
               personas.append(Persona.objects.get(usuario=i))#funcionara cuando se cree una nueva
     
+
+        n_hombres = 0
+        n_mujeres = 0
+        n_otros = 0
+        for p in personas:
+            if p.sexo == "hombre" or p.sexo == "Hombre":
+                n_hombres+=1
+            elif p.sexo == "mujer" or p.sexo == "Mujer":
+                n_mujeres+=1
+            else:
+                n_otros+=1
+
+        sexos = ["Mujeres","Hombres","Otros"]
+        datos_sexo = [n_mujeres,n_hombres,n_otros]
+
         context['id']=vid
         context['vot']=lista
         context['pers']= personas
+        context['n_hombres']=n_hombres
+        context['n_mujeres']=n_mujeres
+        context['n_otros']=n_otros
+        
+
         return context
 
 

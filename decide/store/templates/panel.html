@@ -19,6 +19,38 @@
 <h2>No hay usuarios registrados aptos para esa votacion</h2>
 {% endfor %}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>   
+
+<canvas id="chart" width="500" height="500"></canvas>
+
+<script>
+let ctx = document.getElementById("chart").getContext("2d");
+
+let chart = new Chart(ctx, {
+  type: "bar",
+  data: {
+     labels: ["Mujeres", "Hombres", "Otros"],
+     datasets: [
+        {
+          label: "Número de personas",
+          backgroundColor: "#79AEC8",
+          borderColor: "#417690",
+          data: [{{n_mujeres}}, {{n_hombres}}, {{n_otros}}]
+        }
+     ]
+  },
+  options: {
+     title: {
+        text: "Género de los votantes",
+        display: true
+     }
+  }
+});
+
+</script>   
+
+
+
 
 {% if message %}
 <p>Error: {{message}}</p>
