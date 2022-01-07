@@ -156,7 +156,7 @@ class Voting(models.Model):
                 'votes': votes
             })
 
-        data = { 'type': self.question.type, 'options': opts ,'tally':tally}
+        data = { 'type': self.question.type, 'options': opts}
         postp = mods.post('postproc', json=data)
 
         self.postproc = postp
