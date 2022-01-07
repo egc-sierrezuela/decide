@@ -242,10 +242,10 @@ class FilterCensusUnitTest(BaseTestCase):
         user3.save()
 
         #Creación de personas asociadas a censos
-        pers1 = Persona(usuario=user1, sexo='masculino', ip= '127.0.0.1', region='ES', edad=18)
+        pers1 = Persona(usuario=user1, sexo='hombre', ip= '127.0.0.1', region='ES', edad=18)
         pers1.save()
 
-        pers2 = Persona(usuario=user2, sexo='femenino', ip= '127.0.0.1', region='ES', edad=41)
+        pers2 = Persona(usuario=user2, sexo='mujer', ip= '127.0.0.1', region='ES', edad=41)
         pers2.save()
 
         pers3 = Persona(usuario=user3, sexo='otro', ip= '127.0.0.1', region='ES', edad=78)
@@ -274,7 +274,7 @@ class FilterCensusUnitTest(BaseTestCase):
         self.assertEqual(census.voter_id, 3)
 
     def test_sex_filter_negative(self):
-        filter = admin.SexCensusFilter(None, {'genero':'inventado'}, Census, admin.CensusAdmin)
+        filter = admin.SexCensusFilter(None, {'sexo':'inventado'}, Census, admin.CensusAdmin)
         census = filter.queryset(None, Census.objects.all())
         self.assertEqual(census, None)
 
