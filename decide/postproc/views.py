@@ -50,15 +50,14 @@ class PostProcView(APIView):
         return out
 
       
-    def borda(self, options,tally):
+    def borda(self, options):
         out = []
-        print(tally)
+
         for opt in options:
             votos = 0
             preference = 0
             #Numero total de votos por questions para ordenar por preferencia
-            print(opt['votes'])
-            n = opt['votes']        
+            n = len(opt['votes'])        
             while preference < n:
                 #Preference es una variable que indica el orden de preferencia de las respuestas a las questions de las votaciones
                 votos += (n-preference)* opt['votes'][preference]
@@ -129,7 +128,8 @@ class PostProcView(APIView):
 
         out = []
         questions = request.data
-        tally=request.data['tally']
+        print('questionsssssss')
+        print(questions)
 
         result = None
         t = questions['type']
@@ -138,7 +138,7 @@ class PostProcView(APIView):
         if t == 0:
             result = self.identity(opts)
         if t == 2:
-            result = self.borda(opts,tally)
+            result = self.borda(opts)
         if t == 4:
             result = self.equality(opts)
         if t == 3 or t == 1:

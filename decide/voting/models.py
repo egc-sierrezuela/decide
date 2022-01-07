@@ -128,11 +128,27 @@ class Voting(models.Model):
         options = self.question.options.all()
 
         opts = []
+        opciones = len(options)
         for opt in options:
             if isinstance(tally, list):
-                votes = tally.count(opt.number)
+                if self.question.type != 2:
+                    votes = tally.count(opt.number)
+                else:
+                    votes = []
+                    i = 0
+                    while i < opciones:
+                        votes.append(0)
+                        i+=1
+                    for vote in tally:
+                        o = 0
+                        vot = str(vote)
+                        while o < len(vot):
+                            if vot[o] == str(opt.number):
+                                votes[o] +=1
+                            o+=1
             else:
                 votes = 0
+ 
             opts.append({
                 'option': opt.option,
                 'number': opt.number,
@@ -145,35 +161,6 @@ class Voting(models.Model):
 
         self.postproc = postp
         self.save()
-
-    '''def do_postproc(self):
-        tally = self.tally
-        postprocs = ['IDENTITY', 'BORDA', 'DHONT', 'EQUALITY', 'SAINTE_LAGUE']
-        data = []
-
-        for i, q in enumerate(self.question.all()):
-            opciones = q.options.all()
-            opt_count=len(opciones)
-            opts = []
-            for opt in opciones:
-                votes = 0
-                for dicc in tally:
-                    indice = opt.number
-                    pos = dicc.get(str(indice))
-
-                    if pos!=None and pos[1]==q.id:
-                        votes = votes + 1
-                opts.append({
-                    'question': opt.question.desc,
-                    'question_id':opt.question.id,
-                    'option': opt.option,
-                    'number': opt.number,
-                    'votes': votes
-                })
-            data.append( { 'type': postprocs[q.type],'options': opts})
-        postp = mods.post('postproc', json=data)
-        self.postproc = postp
-        self.save()'''
 
     def __str__(self):
         return self.name

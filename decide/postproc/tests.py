@@ -587,7 +587,7 @@ class PostProcTestCase(APITestCase):
 
     
     def test_sainte_lague_without_votes(self):
-        data = [{
+        data = {
             'type': 'SAINTE_LAGUE',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
@@ -596,9 +596,9 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 4', 'number': 4, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
                 {'option': 'Option 5', 'number': 5, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
             ]
-        }]
+        }
 
-        expected_result = [{
+        expected_result = {
             'type': 'SAINTE_LAGUE',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
@@ -612,7 +612,7 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 5', 'number': 5, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
                  'postproc': 0},
             ]
-        }]
+        }
 
         response = self.client.post('/postproc/', data, format='json')
         self.assertEqual(response.status_code, 200)

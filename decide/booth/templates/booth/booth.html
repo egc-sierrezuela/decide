@@ -32,8 +32,11 @@
                             <b-form-checkbox :disabled="voteSuccess"
                                             v-model="selected"
                                             :id="'q' + opt.number"
+                                            class="choice-question pb-3"
+                                            v-bind:class="{dp: csspd, trit: csstrit}"
                                             name="question"
                                             button
+                                            size="lg"
                                             :value="opt.number">
                                     [[ opt.option ]]
                             </b-form-checkbox>
