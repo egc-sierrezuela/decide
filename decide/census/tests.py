@@ -2,7 +2,8 @@ import random
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from rest_framework.test import APIClient
-
+from census import admin
+from authentication.models import Persona
 from .models import Census
 from base import mods
 from base.tests import BaseTestCase
@@ -213,6 +214,89 @@ class ExportCensusUnitTest(BaseTestCase):
         response = c.post("/admin/census/census/", {'action':'export_census', '_selected_action': str(self.census.id)}, format='json')
         self.assertEqual(response.status_code, 302)
 
+class FilterCensusUnitTest(BaseTestCase):
+
+    def setUp(self):
+
+        #Creación de censos
+        self.census = Census(voting_id = 1, voter_id=1)
+        self.census.save()
+
+        self.census2 = Census(voting_id = 1, voter_id=2)
+        self.census2.save()
+
+        self.census3 = Census(voting_id = 1, voter_id=3)
+        self.census3.save()
+
+        #Creación de usuarios que serán asociados a los censos
+        user1 = User(id=1, username='simpleuser1')
+        user1.set_password('qwerty')
+        user1.save()
+
+        user2 = User(id=2, username='simpleuser2')
+        user2.set_password('qwerty')
+        user2.save()
+
+        user3 = User(id=3, username='simpleuser3')
+        user3.set_password('qwerty')
+        user3.save()
+
+        #Creación de personas asociadas a censos
+        pers1 = Persona(usuario=user1, sexo='masculino', ip= '127.0.0.1', region='ES', edad=18)
+        pers1.save()
+
+        pers2 = Persona(usuario=user2, sexo='femenino', ip= '127.0.0.1', region='ES', edad=41)
+        pers2.save()
+
+        pers3 = Persona(usuario=user3, sexo='otro', ip= '127.0.0.1', region='ES', edad=78)
+        pers3.save()
+
+
+        #Creación de usuario administrador
+        user_admin = User(username='admincensus', is_staff=True, is_superuser=True)
+        user_admin.set_password=('qwerty')
+        user_admin.save()
+        self.user_admin = user_admin
+        super().setUp()
+
+    def test_sex_filter_positive(self):
+        filter = admin.SexCensusFilter(None, {'sexo':'hombre'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())[0]
+        self.assertEqual(census.voter_id, 1)
+
+
+        filter = admin.SexCensusFilter(None, {'sexo':'mujer'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())[0]
+        self.assertEqual(census.voter_id, 2)
+
+        filter = admin.SexCensusFilter(None, {'sexo':'otro'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())[0]
+        self.assertEqual(census.voter_id, 3)
+
+    def test_sex_filter_negative(self):
+        filter = admin.SexCensusFilter(None, {'genero':'inventado'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())
+        self.assertEqual(census, None)
+
+
+    def test_age_filter_positive(self):
+        filter = admin.AgeCensusFilter(None, {'edad':'18-30'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())[0]
+        self.assertEqual(census.voter_id, 1)
+
+        filter = admin.AgeCensusFilter(None, {'edad':'31-50'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())[0]
+        self.assertEqual(census.voter_id, 2)
+
+        filter = admin.AgeCensusFilter(None, {'edad':'50+'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())[0]
+        self.assertEqual(census.voter_id, 3)
+
+    
+    def test_age_filter_negative(self):
+        filter = admin.AgeCensusFilter(None, {'edad':'+75'}, Census, admin.CensusAdmin)
+        census = filter.queryset(None, Census.objects.all())
+        self.assertEqual(census, None)
     
 
 
