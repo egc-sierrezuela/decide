@@ -9,95 +9,83 @@
 {% endblock %}
 
 {% block content %}
-    
     {% if puede_votar %}
-
-    {% if rank_order_scale %}
-    
-    <h2>[[ voting.question.desc ]]</h2>
-    <div id="questionHelp">Pregunta de ordenación con {{voting}} [[ voting.question ]] opciones. A continuación se presenta la pregunta que has de responder, las instrucciones para el voto y las opciones.</div>
-        <p >Seleccione todas las opciones en orden de preferencia de mayor a menor. El orden seleccionado aparece en la parte inferior en forma de lista.</p>
-        <p >Pulse el botón "Enviar" para confirmar su selección y efectuar el voto.</p>
-        <b-form-group v-for="opt in voting.question.options" :key="opt.number">
-            <b-form-checkbox :disabled="voteSuccess"
-                            v-model="selected"
-                            :id="'q' + opt.number"
-                            class="choice-question pb-3"
-                            v-bind:class="{dp: csspd, trit: csstrit}"
-                            name="question"
-                            button
-                            size="lg"
-                            :value="opt.number">
-                    [[ opt.option ]]
-            </b-form-checkbox>
-        </b-form-group>
-        <div>
-            <h3 v-if="selected.length > 0">El orden seleccionado es:</h3>
-            <h4>
-                <ol>
-                    <li class="py-2" v-for="opt in selected">
-                        <div v-for="option in question.options">
-                            <h4 v-if="option.number == opt">[[option.option]]</h4>
-                        </div>
-                    </li>
-                </ol>
-            </h4>
-        </div>
-        <b-button id="rankSendButton" :disabled="voteSuccess" v-if="selected.length == question.options.length" class="mb-5 col-6 offset-3 col-sm-4 offset-sm-4 col-xl-2 offset-xl-5 btn-white" v-bind:class="{dp: csspd, trit: csstrit}" block type="button" variant="primary" size="lg" href="#" v-on:click="decideSend">
-            {% trans "Enviar" %}
-        </b-button>
-    {% else %}
-
-    <div id="app-booth">
         <!-- Navbar -->
-        <nav class="navbar navbar-light bg-info">
-            <a class="navbar-brand" href="#">
-              <img src="../../static/booth/images/decideD.png" width="40" height="30" class="d-inline-block align-top" alt="">
-              Decide
-            </a>
-          </nav>
+            <nav class="navbar navbar-light bg-info">
+                <a class="navbar-brand" href="#">
+                <img src="../../static/booth/images/decideD.png" width="40" height="30" class="d-inline-block align-top" alt="">
+                Decide
+                </a>
+            </nav>
 
-    
-        <b-alert :variant="alertLvl" dismissible v-model="alertShow">
-            [[ alertMsg ]]
-        </b-alert>
-        <div class="voting-externa">
-           
-        <div class="voting">
-            <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
+            <div id="app-booth">
+                <div class="voting-externa">
 
-            <!-- Voting -->
-            <div v-if="!signup">
-                <h2>[[ voting.question.desc ]]</h2>
-                <b-form-group v-for="opt in voting.question.options" :key="opt.number">
-                    <b-form-radio v-model="selected"
-                                  :id="'q' + opt.number"
-                                  name="question"
-                                  :value="opt.number">
-                        [[ opt.option ]]
-                    </b-form-radio>
-                </b-form-group>
+                    <b-alert :variant="alertLvl" dismissible v-model="alertShow">
+                        [[ alertMsg ]]
+                    </b-alert>
+                {% if rank_order_scale %} 
+                    <div id="questionHelp">Pregunta de ordenación con [[ voting.question.options.length ]] opciones. A continuación se presenta la pregunta que has de responder, las instrucciones para el voto y las opciones.</div>
+                        <p >Seleccione todas las opciones en orden de preferencia de mayor a menor. El orden seleccionado aparece en la parte inferior en forma de lista.</p>
+                        <p >Pulse el botón "Enviar" para confirmar su selección y efectuar el voto.</p>
+                        <b-form-group v-for="opt in voting.question.options" :key="opt.number">
+                            <b-form-checkbox :disabled="voteSuccess"
+                                            v-model="selected"
+                                            :id="'q' + opt.number"
+                                            name="question"
+                                            button
+                                            :value="opt.number">
+                                    [[ opt.option ]]
+                            </b-form-checkbox>
+                        </b-form-group>
+                        <div>
+                            <h3 v-if="selected.length > 0">El orden seleccionado es:</h3>
+                            <h4>
+                                <ol>
+                                    <li class="py-2" v-for="opt in selected">
+                                        <div v-for="option in voting.question.options">
+                                            <h4 v-if="option.number == opt">[[option.option]]</h4>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </h4>
+                        </div>
+                        <b-button id="rankSendButton" :disabled="voteSuccess" v-if="selected.length == voting.question.options.length" class="mb-5 col-6 offset-3 col-sm-4 offset-sm-4 col-xl-2 offset-xl-5 btn-white" v-bind:class="{dp: csspd, trit: csstrit}" block type="button" variant="primary" size="lg" href="#" v-on:click="decideSend">
+                            {% trans "Enviar" %}
+                        </b-button>
+                {% else %}
+                <div class="voting">
+                    <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
 
-                <b-button id="voting_button" type="button" variant="primary" v-on:click="decideSend">
-                    {% trans "Vote" %}
-                </b-button>
-                <b-button id="return_button" type="button" variant="primary" href="{% url "pagina-inicio" %}">Volver</b-button>
+                    <!-- Voting -->
+                    <div v-if="!signup">
+                        <h2>[[ voting.question.desc ]]</h2>
+                        <b-form-group v-for="opt in voting.question.options" :key="opt.number">
+                            <b-form-radio v-model="selected"
+                                        :id="'q' + opt.number"
+                                        name="question"
+                                        :value="opt.number">
+                                [[ opt.option ]]
+                            </b-form-radio>
+                        </b-form-group>
 
-                <br>
-                    <p class="card-text mt-2">
-                    Número de votos totales computados en esta votacion: {{ votos }}
-                    </p>
-            </div> 
+                        <b-button id="voting_button" type="button" variant="primary" v-on:click="decideSend">
+                            {% trans "Vote" %}
+                        </b-button>
+                        <b-button id="return_button" type="button" variant="primary" href="{% url "pagina-inicio" %}">Volver</b-button>
+
+                        <br>
+                            <p class="card-text mt-2">
+                            Número de votos totales computados en esta votacion: {{ votos }}
+                            </p>
+                    </div> 
+                </div>
+                {% endif %}
+                </div>
+            </div>
+        <div class="voting-images">
+            <img src="../../static/booth/images/votaciones.png"
         </div>
-    </div>
-</div>
-
-    <div class="voting-images">
-        <img src="../../static/booth/images/votaciones.png"
-    </div>
-
-    
-    {% endif %}
     {% else %}
         <h2>Error</h2>
         <div>

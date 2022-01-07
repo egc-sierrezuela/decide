@@ -93,8 +93,6 @@ class Voting(models.Model):
         '''
 
         votes = self.get_votes(token)
-        print("Votes")
-        print(votes)
 
         auth = self.auths.first()
         shuffle_url = "/shuffle/{}/".format(self.id)
@@ -114,9 +112,6 @@ class Voting(models.Model):
         response = mods.post('mixnet', entry_point=decrypt_url, baseurl=auth.url, json=data,
                 response=True)
 
-        print("decrypt")
-        print(response.json())
-
         if response.status_code != 200:
             # TODO: manage error
             pass
@@ -129,16 +124,11 @@ class Voting(models.Model):
 
     def do_postproc(self):
         tally = self.tally
-        tallies = ['IDENTITY', 'BORDA', 'DHONT', 'EQUALITY', 'SAINTE_LAGUE', 'DROOP', 'IMPERIALI', 'HARE']
         points = self.points
         options = self.question.options.all()
-        print("SELF")
-        print(self.question.type)
 
         opts = []
         for opt in options:
-            print("OPT")
-            print(opt)
             if isinstance(tally, list):
                 votes = tally.count(opt.number)
             else:
@@ -150,7 +140,7 @@ class Voting(models.Model):
                 'votes': votes
             })
 
-        data = { 'type': self.question.type, 'options': opts }
+        data = { 'type': self.question.type, 'options': opts ,'tally':tally}
         postp = mods.post('postproc', json=data)
 
         self.postproc = postp
