@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+    <link type="text/css" rel="stylesheet"
+         href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet"
+         href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<div>
+     <h2>Iniciar sesion</h2>
+<form method="post" action="">{% csrf_token %}
+	{{form.as_p}}
+	<input type="Submit" value="Entrar"/>
+</form>
+<button>
+     <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+ </button>
+ <button>
+     <a href="{% url 'social:begin' 'linkedin-oauth2' %}">Login with LinkedIn</a>
+ </button>
+ <button>
+     <a href="{% url 'social:begin' 'github' %}">Login with Github</a>
+ </button>
+ <button>
+    <a href="/authentication/register-alt/">Registrar</a>
+</button>  
+{% if message %}
+<p>Error: {{message}}</p>
+{% endif %}
+</div>
+{% endblock %}
