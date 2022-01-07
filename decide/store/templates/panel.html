@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+{% endblock %}
+
+{% block content %}
+<h2>Usuarios de la votacion {{id}} :</h2>
+{% for i in pers%}
+<h5>ID: {{i.usuario.id}}</h5>
+<h5>User: {{i.usuario.username}}</h5>
+<h5>Sexo: {{i.sexo}}</h5>
+<h5>Correo: {{i.usuario.email}}</h5>
+<h5>IP: {{i.ip}}</h5>
+<h5>Region: {{i.region}}</h5>
+<br></br>
+
+{% empty %}
+<h2>No hay usuarios registrados aptos para esa votacion</h2>
+{% endfor %}
+<br></br>
+
+<button>
+  <a href="/admin">Volver al panel de administración</a>
+</button> 
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>   
+
+<canvas id="chart" width="50" height="50"></canvas>
+<canvas id="pie-chart" width="80" height="45"></canvas>
+<canvas id="bar-chart-horizontal" width="80" height="45"></canvas>
+
+<script>
+
+new Chart(document.getElementById("chart").getContext("2d"), {
+  type: "bar",
+  data: {
+     labels: ["Mujeres", "Hombres", "Otros"],
+     datasets: [
+        {
+          label: "Número de personas",
+          backgroundColor: ["#8e5ea2","#3e95cd","#3cba9f"],
+          data: [{{n_mujeres}}, {{n_hombres}}, {{n_otros}}]
+        }
+     ]
+  },
+  options: {
+     title: {
+        text: "Género de los votantes",
+        display: true
+     }
+  }
+});
+
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Menores de 18", "Entre 18 y 30", "Entre 30 y 70", "Mayores de 70"],
+      datasets: [{
+        label: "personas",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
+        data: [{{menores}},{{jovenes}},{{veteranos}},{{ancianos}}]
+      }]
+    },
+    options: {
+      title: {
+        text: 'Rango de edades de los votantes',
+        display: true
+      }
+    }
+});
+
+new Chart(document.getElementById("bar-chart-horizontal"), {
+  type: 'horizontalBar',
+  data: {
+    labels: ["Europa", "Asia", "Africa", "Latin America", "North America"],
+    datasets: [
+      {
+        label: "Personas",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+        data: [{{europeos}},{{asiaticos}},{{africanos}},{{latinoamericanos}},{{norteamericanos}}]
+      }
+    ]
+  },
+  options: {
+    legend: { display: false },
+    title: {
+      display: true,
+      text: 'Regiones de los votantes'
+    }
+  }
+});
+
+
+
+</script>   
+
+
+
+
+{% if message %}
+<p>Error: {{message}}</p>
+{% endif %}
+</div>
+{% endblock %}
