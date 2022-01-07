@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -68,19 +69,18 @@ MODULES = [
     'social_django',
 ]
 
-
-BASEURL = 'https://egc-sierrezuela-2.herokuapp.com'
+BASEURL = 'https://sierrezuela3-decide.herokuapp.com/'
 
 APIS = {
-    'authentication': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'base': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'booth': 'hhttps://egc-sierrezuela-2.herokuapp.com/',
-    'census': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'mixnet': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'postproc': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'store': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'visualizer': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'voting': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'authentication': BASEURL,
+    'base': BASEURL,
+    'booth': BASEURL,
+    'census': BASEURL,
+    'mixnet': BASEURL,
+    'postproc': BASEURL,
+    'store': BASEURL,
+    'visualizer': BASEURL,
+    'voting': BASEURL,
 }
 
 
@@ -226,4 +226,3 @@ INSTALLED_APPS = INSTALLED_APPS + MODULES
 
 import django_heroku
 django_heroku.settings(locals())
-
