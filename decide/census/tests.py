@@ -12,6 +12,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+import csv
 
 class CensusTestCase(BaseTestCase):
 
@@ -79,109 +80,6 @@ class CensusTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 204)
         self.assertEqual(0, Census.objects.count())
 
-class ExportCensus(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.base = BaseTestCase()
-        self.base.setUp()
-        options = webdriver.ChromeOptions()
-        options.headless = True
-        self.driver = webdriver.Chrome(options=options)
-        self.vars = {}
-        self.census=Census(voting_id=1,voter_id=1)
-        self.census.save()
-
-    def tearDown(self):
-        super().tearDown()
-        self.driver.quit()
-
-        self.base.tearDown()
-
-    def test_export_census_positive(self):
-        #Test name: exportar_censo
-        #Step # | name | target | value
-        #1 | open | /admin/ | 
-        self.driver.get(f'{self.live_server_url}/admin/')
-        self.driver.find_element_by_id('id_username').send_keys("adminprueba")
-        self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
-
-        
-        # 2 | setWindowSize | 821x694 | 
-        self.driver.set_window_size(821, 694)
-
-        # 3 | click | linkText=Censuss | 
-        self.driver.find_element(By.LINK_TEXT, "Censuss").click()
-
-        # 4 | click | id=action-toggle | 
-        self.driver.find_element(By.ID, "action-toggle").click()
-
-        # 5 | select | name=action | label=Export census
-        dropdown = self.driver.find_element(By.NAME, "action")
-        dropdown.find_element(By.XPATH, "//option[. = 'Export census']").click()
-
-        
-        element = self.driver.find_element(By.NAME, "action")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).click_and_hold().perform()
-
-        element = self.driver.find_element(By.NAME, "action")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).perform()
-
-        element = self.driver.find_element(By.NAME, "action")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).release().perform()
-
-        # 6 | click | name=index | 
-        self.driver.find_element(By.NAME, "index").click()
-
-        #Refrescamos la página
-        self.driver.refresh()
-
-        #Si la exportación se ha realizado, debe aparecer un mensaje
-        mensaje = self.driver.find_element(By.CLASS_NAME, "success").text
-
-        self.assertEquals(mensaje, 'Exportación realizada con éxito')
-
-    def test_export_census_negative(self):
-        self.driver.get(f'{self.live_server_url}/admin/')
-        self.driver.find_element_by_id('id_username').send_keys("adminprueba")
-        self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
-
-        
-        # 2 | setWindowSize | 821x694 | 
-        self.driver.set_window_size(821, 694)
-
-        # 3 | click | linkText=Censuss | 
-        self.driver.find_element(By.LINK_TEXT, "Censuss").click()
-
-        # 4 | click | id=action-toggle | 
-        #self.driver.find_element(By.ID, "action-toggle").click()
-
-        # 5 | select | name=action | label=Export census
-        dropdown = self.driver.find_element(By.NAME, "action")
-        dropdown.find_element(By.XPATH, "//option[. = 'Export census']").click()
-
-        
-        element = self.driver.find_element(By.NAME, "action")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).click_and_hold().perform()
-
-        element = self.driver.find_element(By.NAME, "action")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).perform()
-
-        element = self.driver.find_element(By.NAME, "action")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).release().perform()
-
-        # 6 | click | name=index | 
-        self.driver.find_element(By.NAME, "index").click()
-
-        #Si la exportación se ha realizado, debe aparecer un mensaje
-        mensaje = self.driver.find_element(By.CLASS_NAME, "warning").text
-
-        self.assertEquals(mensaje, 'Items must be selected in order to perform actions on them. No items have been changed.')
 
 class ExportCensusUnitTest(BaseTestCase):
 
@@ -301,3 +199,38 @@ class FilterCensusUnitTest(BaseTestCase):
 
 
     
+class ImportCensusUnitTest(BaseTestCase):
+
+    def setUp(self):
+        self.census = Census(voting_id = 1, voter_id=1)
+        self.census.save()
+        user_admin = User(username='admincensus', is_staff=True, is_superuser=True)
+        user_admin.set_password=('qwerty')
+        user_admin.save()
+        self.user_admin = user_admin
+        super().setUp()
+
+        #Probamos que un usuario administrador puede acceder a importar censo
+    def test_import_census_positive(self):
+        c = Client()
+        c.force_login(self.user_admin)
+        response = c.post("/admin/census/census/", {'action':'import_census', '_selected_action': str(self.census.id)}, format='json')
+        self.assertEqual(response.status_code, 200)
+
+    #Probamos que un usuario no puede acceder a la url fuera de /admin
+    def test_import_census_negative(self):
+        c = Client()
+        c.force_login(self.user_admin)
+        respuesta=c.post('census/importar')#Antigua URL transladada a /admin para la importacion
+        self.assertEqual(respuesta.status_code, 404)
+
+    #Probamos que un usuario administrador no puede enviar datos vacíos
+    def test_import_census_negative(self):
+        c = Client()
+        c.force_login(self.user_admin)
+        response = c.post("/admin/census/census/", {'action':'import_census', '_selected_action': str(self.census.id)}, format='json')
+        self.assertEqual(response.status_code, 200)
+        data={}
+        respuesta=self.client.post('admin/census/census/importar',data,format='json')
+        self.assertEqual(respuesta.status_code, 404)
+
