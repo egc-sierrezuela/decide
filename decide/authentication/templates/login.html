@@ -25,6 +25,9 @@
  <button>
      <a href="{% url 'social:begin' 'github' %}">Login with Github</a>
  </button>
+ <button>
+    <a href="/authentication/register-alt/">Registrar</a>
+</button>  
 {% if message %}
 <p>Error: {{message}}</p>
 {% endif %}
