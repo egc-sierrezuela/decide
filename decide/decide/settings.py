@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
-    'gateway',
+    'gateway'
 ]
 
 REST_FRAMEWORK = {
@@ -226,3 +226,4 @@ INSTALLED_APPS = INSTALLED_APPS + MODULES
 
 import django_heroku
 django_heroku.settings(locals())
+

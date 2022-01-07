@@ -14,4 +14,3 @@ django-heroku
 gunicorn
 django-ipware
 ip2geotools
-

@@ -93,9 +93,78 @@ class PanelView(TemplateView):
         for i in lista:
               personas.append(Persona.objects.get(usuario=i))#funcionara cuando se cree una nueva
     
+
+        n_hombres = 0
+        n_mujeres = 0
+        n_otros = 0
+
+        for p in personas:
+            if p.sexo == "hombre" or p.sexo == "Hombre":
+                n_hombres+=1
+            elif p.sexo == "mujer" or p.sexo == "Mujer":
+                n_mujeres+=1
+            else:
+                n_otros+=1
+
+        menores = 0
+        jovenes = 0
+        veteranos = 0
+        ancianos = 0
+
+        for p in personas:
+            if p.edad < 18:
+                menores+=1
+            elif p.edad>18 and p.edad<=30:
+                jovenes+=1
+            elif p.edad>30 and p.edad<=70:
+                veteranos+=1
+            elif p.edad>70:
+                ancianos+=1
+
+        pais_europa = ["AD","AL","AT","AX","BA","BE","BG","BY","CH","CZ","DK","DE","EE","ES","FI","FO","FR","GB","GG","GI","GR","HR","HU","IE","IM","IS","IT","JE","LI","LT","LU","LV","MC","MD","ME","MK","MT","NL","NO","PL","PT","RO","RS","RU","SE","SI","SJ","SK","SM","TR","UA","VA"]
+        pais_asia = ["AE","AF","AM","AZ","BD","BH","BN","BT","CC","CN","CX","CY","GE","HK","ID","IL","IN","IO","IQ","IR","JO","JP","KG","KH","KP","KR","KW","KZ","LA","LB","LK","MM","MN","MO","MV","MY","NP","OM","PH","PK","PS","PS","QA","SA","SG","SY","TH","TJ","TL","TM","TW","UZ","VN","YE"]
+        pais_africa = ["AO","BF","BI","BJ","BW","CD","CF","CG","CI","CM","CV","DJ","DZ","EG","EH","ER","ET","GA","GH","GM","GN","GQ","GW","KE","KM","LR","LS","LY","MA","MG","ML","MR","MU","MW","MZ","NA","NE","NG","RE","RW","SC","SD","SH","SL","SN","SO","SS","ST","SZ","TD","TG","TN","TZ","UG","YT","ZA","ZM","ZW"]
+        pais_latam = ["AR","BO","BR","CL","CO","EC","FK","GF","GY","PE","PY","SR","UY","VE"]
+        pais_norteAmerica = ["AG","AI","AW","BB","BL","BM","BQ","BS","BZ","CA","CR","CW","DM","DO","GD","GL","GP","GT","HN","HT","JM","KN","KY","LC","MF","MQ","MS","MX","NI","PA","PM","PR","SV","SX","TC","TT","US","VC","VG","VI"]
+
+        europeos = 0
+        africanos = 0
+        asiaticos = 0
+        latinoamericanos = 0
+        norteamericanos = 0
+
+        for p in personas:
+            if p.region in pais_europa:
+                europeos+=1
+            elif p.region in pais_asia:
+                asiaticos+=1
+            elif p.region in pais_africa:
+                africanos+=1
+            elif p.region in pais_latam:
+                latinoamericanos+=1
+            elif p.region in pais_norteAmerica:
+                norteamericanos+=1
+        
+
         context['id']=vid
         context['vot']=lista
         context['pers']= personas
+        
+        context['n_hombres']=n_hombres
+        context['n_mujeres']=n_mujeres
+        context['n_otros']=n_otros
+
+        context['menores']=menores
+        context['jovenes']=jovenes
+        context['veteranos']=veteranos
+        context['ancianos']=ancianos
+
+        context['europeos']=europeos 
+        context['africanos']=africanos 
+        context['asiaticos']=asiaticos 
+        context['latinoamericanos']=latinoamericanos 
+        context['norteamericanos']=norteamericanos 
+
         return context
 
 
