@@ -133,21 +133,22 @@ class PostProcView(APIView):
 
         out = []
         questions = request.data
-
+        print("QUESTIONS")
         for q in questions:
-            result = None
-            t = q['type']
-            opts = q['options']
+            print(q)
+        result = None
+        t = questions['type']
+        opts = questions['options']
 
-            if t == 'IDENTITY':
-                result = self.identity(opts)
-            if t == 'BORDA':
-                result = self.borda(opts)
-            if t == 'EQUALITY':
-                result = self.equality(opts)
-            if t == 'SAINTE_LAGUE' or t == 'HONDT':
-                result = self.proportional_representation(opts, t)
+        if t == 0:
+            result = self.identity(opts)
+        if t == 2:
+            result = self.borda(opts)
+        if t == 4:
+            result = self.equality(opts)
+        if t == 3 or t == 1:
+            result = self.proportional_representation(opts, t)
                 
-            out.append({'type': t, 'options': result})
+        out.append({'type': t, 'options': result})
 
         return Response(out)

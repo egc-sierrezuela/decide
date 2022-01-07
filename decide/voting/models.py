@@ -33,7 +33,8 @@ class QuestionOption(models.Model):
 class Voting(models.Model):
     name = models.CharField(max_length=200)
     desc = models.TextField(blank=True, null=True)
-    question = models.ManyToManyField(Question, related_name='voting')
+    question = models.ForeignKey(Question, related_name='voting', on_delete=models.CASCADE)
+    points = models.PositiveIntegerField(default="1")
 
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
@@ -81,22 +82,19 @@ class Voting(models.Model):
     def get_votes(self, token=''):
         # gettings votes from store
         votes = mods.get('store', params={'voting_id': self.id}, HTTP_AUTHORIZATION='Token ' + token)
+        print("VOTES")
+        print(votes)
         # anon votes
-        return votes
+        return [[i['a'], i['b']] for i in votes]
 
     def tally_votes(self, token=''):
         '''
         The tally is a shuffle and then a decrypt
         '''
 
-        votes  = self.get_votes(token)
-        votos = []
-        for i in votes:
-            if type(i)=='dict':
-                aa=i['a'].replace("[","").replace("]","").replace("'","").replace(" ","").split(",")
-                bb=i['b'].replace("[","").replace("]","").replace("'","").replace(" ","").split(",")
-                for j in range(0,len(aa)):
-                    votos.append([int(aa[j]), int(bb[j]), j])
+        votes = self.get_votes(token)
+        print("Votes")
+        print(votes)
 
         auth = self.auths.first()
         shuffle_url = "/shuffle/{}/".format(self.id)
@@ -104,7 +102,7 @@ class Voting(models.Model):
         auths = [{"name": a.name, "url": a.url} for a in self.auths.all()]
 
         # first, we do the shuffle
-        data = { "msgs": votos }
+        data = { "msgs": votes }
         response = mods.post('mixnet', entry_point=shuffle_url, baseurl=auth.url, json=data,
                 response=True)
         if response.status_code != 200:
@@ -116,6 +114,9 @@ class Voting(models.Model):
         response = mods.post('mixnet', entry_point=decrypt_url, baseurl=auth.url, json=data,
                 response=True)
 
+        print("decrypt")
+        print(response.json())
+
         if response.status_code != 200:
             # TODO: manage error
             pass
@@ -123,13 +124,41 @@ class Voting(models.Model):
         self.tally = response.json()
         self.save()
 
-        tally=self.tally
-        return tally
+        self.do_postproc()
 
 
     def do_postproc(self):
         tally = self.tally
-        postprocs = ['IDENTITY', 'BORDA', 'HONDT', 'EQUALITY', 'SAINTE_LAGUE']
+        tallies = ['IDENTITY', 'BORDA', 'DHONT', 'EQUALITY', 'SAINTE_LAGUE', 'DROOP', 'IMPERIALI', 'HARE']
+        points = self.points
+        options = self.question.options.all()
+        print("SELF")
+        print(self.question.type)
+
+        opts = []
+        for opt in options:
+            print("OPT")
+            print(opt)
+            if isinstance(tally, list):
+                votes = tally.count(opt.number)
+            else:
+                votes = 0
+            opts.append({
+                'option': opt.option,
+                'number': opt.number,
+                'points': points,
+                'votes': votes
+            })
+
+        data = { 'type': self.question.type, 'options': opts }
+        postp = mods.post('postproc', json=data)
+
+        self.postproc = postp
+        self.save()
+
+    '''def do_postproc(self):
+        tally = self.tally
+        postprocs = ['IDENTITY', 'BORDA', 'DHONT', 'EQUALITY', 'SAINTE_LAGUE']
         data = []
 
         for i, q in enumerate(self.question.all()):
@@ -154,7 +183,7 @@ class Voting(models.Model):
             data.append( { 'type': postprocs[q.type],'options': opts})
         postp = mods.post('postproc', json=data)
         self.postproc = postp
-        self.save()
+        self.save()'''
 
     def __str__(self):
         return self.name

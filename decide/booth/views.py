@@ -132,6 +132,8 @@ class BoothView(TemplateView):
                 r[0]['pub_key'][k] = str(v)
 
             context['voting'] = json.dumps(r[0])
+            tipo_votacion = Voting.objects.all().filter(id=voting_id)[0].question.type
+            context['rank_order_scale'] = tipo_votacion == 2
             context['votos'] = Vote.objects.all().filter(voting_id=voting_id).count()
             check_user_has_voted(context, voting_id, voter_id)
         except:

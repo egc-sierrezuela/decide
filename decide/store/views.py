@@ -58,18 +58,13 @@ class StoreView(generics.ListAPIView):
         perms = mods.get('census/{}'.format(vid), params={'voter_id': uid}, response=True)
         if perms.status_code == 401:
             return Response({}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        num_preguntas=len(voting[0]['question'])
-        lista_a=[]
-        lista_b=[]
-        for i in range(0,num_preguntas):
-            lista_a.append(vote[i]["a"])
-            lista_b.append(vote[i]["b"])
 
-        a = lista_a
-        b = lista_b    
+        a = vote.get("a")
+        b = vote.get("b")
 
-        v, _ = Vote.objects.get_or_create(voting_id=vid, voter_id=uid)
+        defs = { "a": a, "b": b }
+        v, _ = Vote.objects.get_or_create(voting_id=vid, voter_id=uid,
+                                          defaults=defs)
         v.a = a
         v.b = b
 

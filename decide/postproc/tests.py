@@ -192,10 +192,10 @@ class PostProcTestCase(APITestCase):
         values = response.json()
         self.assertEqual(values, expected_result)
 
-    #TESTS DE HONDT
-    def test_hondt(self):
+    #TESTS DE DHONT
+    def test_DHONT(self):
         data = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -207,7 +207,7 @@ class PostProcTestCase(APITestCase):
         }]
 
         expected_result = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 3},
@@ -231,9 +231,9 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
 
 
-    def test_hondt2(self):
+    def test_DHONT2(self):
         data = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -244,7 +244,7 @@ class PostProcTestCase(APITestCase):
         }]
 
         expected_result = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 3},
@@ -266,9 +266,9 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
 
 
-    def test_hondt_without_points(self):
+    def test_DHONT_without_points(self):
         data = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -279,7 +279,7 @@ class PostProcTestCase(APITestCase):
         }]
 
         expected_result = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 0},
@@ -301,9 +301,9 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
 
 
-    def test_hondt_without_votes(self):
+    def test_DHONT_without_votes(self):
         data = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
                 {'option': 'Option 2', 'number': 2, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
@@ -314,7 +314,7 @@ class PostProcTestCase(APITestCase):
         }]
 
         expected_result = [{
-            'type': 'HONDT',
+            'type': 'DHONT',
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
                  'postproc': 0},
@@ -336,19 +336,19 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
 
 
-    def test_hondt_without_option_attribute(self):
+    def test_DHONT_without_option_attribute(self):
         with self.assertRaises(KeyError):
             data = [{
-                'type': 'HONDT'
+                'type': 'DHONT'
             }]
 
             response = self.client.post('/postproc/', data, format='json')
             
 
-    def test_hondt_without_options(self):
+    def test_DHONT_without_options(self):
         with self.assertRaises(Exception):
             data = [{
-                'type': 'HONDT',
+                'type': 'DHONT',
                 'options': []
             }]
 
