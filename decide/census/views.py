@@ -19,7 +19,6 @@ from rest_framework.status import (
 from base.perms import UserIsStaff
 from .models import Census
 import csv
-from django.shortcuts import render
 from census.forms import votacionForm
 
 def CensusImport(request):
@@ -49,7 +48,6 @@ def CensusImport(request):
                return render(request,'censusImport.html',{'vacio':'Selecciona un archivo csv con el formato indicado'})
     
     return render(request,'censusImport.html')
-
 
 
 class CensusCreate(generics.ListCreateAPIView):
