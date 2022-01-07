@@ -12,6 +12,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+import csv
 
 class CensusTestCase(BaseTestCase):
 
@@ -197,33 +198,39 @@ class FilterCensusUnitTest(BaseTestCase):
     
 
 
-    class ImportCensusUnitTest(BaseTestCase):
+    
+class ImportCensusUnitTest(BaseTestCase):
 
-        def setUp(self):
-            self.census = Census(voting_id = 1, voter_id=1)
-            self.census.save()
-            user_admin = User(username='admincensus', is_staff=True, is_superuser=True)
-            user_admin.set_password=('qwerty')
-            user_admin.save()
-            self.user_admin = user_admin
+    def setUp(self):
+        self.census = Census(voting_id = 1, voter_id=1)
+        self.census.save()
+        user_admin = User(username='admincensus', is_staff=True, is_superuser=True)
+        user_admin.set_password=('qwerty')
+        user_admin.save()
+        self.user_admin = user_admin
+        super().setUp()
 
-            user_noadmin = User(username='simpleuser')
-            user_noadmin.set_password('qwery')
-            user_noadmin.save()
-            self.user_noadmin = user_noadmin
-            super().setUp()
+        #Probamos que un usuario administrador puede acceder a importar censo
+    def test_import_census_positive(self):
+        c = Client()
+        c.force_login(self.user_admin)
+        response = c.post("/admin/census/census/", {'action':'import_census', '_selected_action': str(self.census.id)}, format='json')
+        self.assertEqual(response.status_code, 200)
 
-        #Probamos que un usuario administrador exporta un censo y se lo descarga
-        def test_export_census_positive(self):
-            c = Client()
-            c.force_login(self.user_admin)
-            response = c.post("/admin/census/census/", {'action':'export_census', '_selected_action': str(self.census.id)}, format='json')
-            self.assertEqual(response.status_code, 200)
-            self.assertEquals(response.get('Content-Disposition'), 'attachment; filename="censo.csv"')
+    #Probamos que un usuario no puede acceder a la url fuera de /admin
+    def test_import_census_negative(self):
+        c = Client()
+        c.force_login(self.user_admin)
+        respuesta=c.post('census/importar')#Antigua URL transladada a /admin para la importacion
+        self.assertEqual(respuesta.status_code, 404)
 
-        #Probamos que un usuario NO administrador intenta acceder al panel de administración y es redirigido al login
-        def test_export_census_negative(self): 
-            c = Client()
-            c.force_login(self.user_noadmin)
-            response = c.post("/admin/census/census/", {'action':'export_census', '_selected_action': str(self.census.id)}, format='json')
-            self.assertEqual(response.status_code, 302)
+    #Probamos que un usuario administrador no puede enviar datos vacíos
+    def test_import_census_negative(self):
+        c = Client()
+        c.force_login(self.user_admin)
+        response = c.post("/admin/census/census/", {'action':'import_census', '_selected_action': str(self.census.id)}, format='json')
+        self.assertEqual(response.status_code, 200)
+        data={}
+        respuesta=self.client.post('admin/census/census/importar',data,format='json')
+        self.assertEqual(respuesta.status_code, 404)
+
