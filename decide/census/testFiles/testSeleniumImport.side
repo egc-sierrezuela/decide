@@ -1,0 +1,491 @@
+{
+  "id": "914ad4a9-da26-45ee-94c0-fd81e804936c",
+  "version": "2.0",
+  "name": "decide",
+  "url": "http://127.0.0.1:8000",
+  "tests": [{
+    "id": "2b9d1517-3d98-4808-93af-9a16727fcc2d",
+    "name": "import_census_positive",
+    "commands": [{
+      "id": "c4535a0d-566e-4d8c-bb9f-99b9bc997ad6",
+      "comment": "",
+      "command": "open",
+      "target": "/admin/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d242c656-6bfb-47f5-9cf0-e1ceef4048de",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1368x896",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "40e45e4c-5b05-4020-b0cb-e29e81854862",
+      "comment": "",
+      "command": "click",
+      "target": "css=a:nth-child(4)",
+      "targets": [
+        ["css=a:nth-child(4)", "css:finder"],
+        ["xpath=//a[contains(text(),'Log out')]", "xpath:link"],
+        ["xpath=//div[@id='user-tools']/a[3]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/admin/logout/')]", "xpath:href"],
+        ["xpath=//a[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1dfcba81-e0e9-48d0-91c7-f526e10e1ca0",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Log in again",
+      "targets": [
+        ["linkText=Log in again", "linkText"],
+        ["css=p > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Log in again')]", "xpath:link"],
+        ["xpath=//div[@id='content']/p[2]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/admin/')])[3]", "xpath:href"],
+        ["xpath=//p[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Log in again')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f39fef0d-b563-4678-b7b4-5be13e5821a1",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_username",
+      "targets": [
+        ["id=id_username", "id"],
+        ["name=username", "name"],
+        ["css=#id_username", "css:finder"],
+        ["xpath=//input[@id='id_username']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a7a2eeed-1866-4b51-819d-97e7ccba0fc7",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_username",
+      "targets": [
+        ["id=id_username", "id"],
+        ["name=username", "name"],
+        ["css=#id_username", "css:finder"],
+        ["xpath=//input[@id='id_username']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "parri"
+    }, {
+      "id": "e3aa1ec5-4249-4448-a8a0-2c0d97a4c1ec",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_password",
+      "targets": [
+        ["id=id_password", "id"],
+        ["name=password", "name"],
+        ["css=#id_password", "css:finder"],
+        ["xpath=//input[@id='id_password']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "035f4ea1-0904-4836-8cf7-f3abbe068b14",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_password",
+      "targets": [
+        ["id=id_password", "id"],
+        ["name=password", "name"],
+        ["css=#id_password", "css:finder"],
+        ["xpath=//input[@id='id_password']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "parriparri"
+    }, {
+      "id": "8740c785-934d-458e-b9dd-c058c5d546e2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.submit-row > input",
+      "targets": [
+        ["css=.submit-row > input", "css:finder"],
+        ["xpath=//input[@value='Log in']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "030cff38-3706-4a8e-9864-bd64c90638ee",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Censuss",
+      "targets": [
+        ["linkText=Censuss", "linkText"],
+        ["css=.model-census > th > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Censuss')]", "xpath:link"],
+        ["xpath=//div[@id='content-main']/div[5]/table/tbody/tr/th/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/admin/census/census/')]", "xpath:href"],
+        ["xpath=//div[5]/table/tbody/tr/th/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Censuss')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "35f66200-5dbd-42d4-92a5-241e2ce9b37d",
+      "comment": "",
+      "command": "click",
+      "target": "id=action-toggle",
+      "targets": [
+        ["id=action-toggle", "id"],
+        ["css=#action-toggle", "css:finder"],
+        ["xpath=//input[@id='action-toggle']", "xpath:attributes"],
+        ["xpath=//table[@id='result_list']/thead/tr/th/div/span/input", "xpath:idRelative"],
+        ["xpath=//span/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0afe16c7-266d-4beb-8b8b-d7133eba0a31",
+      "comment": "",
+      "command": "select",
+      "target": "name=action",
+      "targets": [],
+      "value": "label=Import census"
+    }, {
+      "id": "e7bdf808-4af6-4dfa-af42-7920529a0ad7",
+      "comment": "",
+      "command": "mouseDownAt",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=select", "css:finder"],
+        ["xpath=//select[@name='action']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/label/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "-103.9765625,-235.3046875"
+    }, {
+      "id": "ab27fd17-c7d5-401d-9b06-872979cb6315",
+      "comment": "",
+      "command": "mouseMoveAt",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=select", "css:finder"],
+        ["xpath=//select[@name='action']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/label/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "-103.9765625,-235.3046875"
+    }, {
+      "id": "0e178f19-a3a4-499a-9da8-7097b188b70b",
+      "comment": "",
+      "command": "mouseUpAt",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=select", "css:finder"],
+        ["xpath=//select[@name='action']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/label/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "-103.9765625,-235.3046875"
+    }, {
+      "id": "1eadc97a-6e7a-4af8-8c05-1bc37c302373",
+      "comment": "",
+      "command": "click",
+      "target": "name=index",
+      "targets": [
+        ["name=index", "name"],
+        ["css=.button", "css:finder"],
+        ["xpath=//button[@name='index']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Go')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "3e388a63-696e-4250-b750-a8fe5f80f248",
+      "comment": "",
+      "command": "click",
+      "target": "name=nuevoCenso",
+      "targets": [
+        ["name=nuevoCenso", "name"],
+        ["css=p > input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@name='nuevoCenso']", "xpath:attributes"],
+        ["xpath=//p/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3c265de4-1212-4674-b555-c9219cfaa1e4",
+      "comment": "",
+      "command": "type",
+      "target": "name=nuevoCenso",
+      "targets": [
+        ["name=nuevoCenso", "name"],
+        ["css=p > input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@name='nuevoCenso']", "xpath:attributes"],
+        ["xpath=//p/input", "xpath:position"]
+      ],
+      "value": "C:\\home/parri/Desktop/decide-sierrezuela-part-3/decide/decide/census/testFiles/\\censo.csv"
+    }, {
+      "id": "2a59f61f-60ec-42cf-9585-67e01c498bab",
+      "comment": "",
+      "command": "click",
+      "target": "css=input:nth-child(2)",
+      "targets": [
+        ["css=input:nth-child(2)", "css:finder"],
+        ["xpath=//input[@value='Cargar censo']", "xpath:attributes"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "1f487b14-fc12-4bd4-a310-1cb46d3320f7",
+    "name": "import_census_negative2",
+    "commands": [{
+      "id": "21ac7def-0f8a-4e2c-b955-3cbbf769ba0b",
+      "comment": "",
+      "command": "open",
+      "target": "/admin/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f90ec8e2-d98b-46ed-b8d8-4cdb8713b34b",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1368x896",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "388dbe8c-8d95-45de-a492-cef1f358bb40",
+      "comment": "",
+      "command": "click",
+      "target": "css=a:nth-child(4)",
+      "targets": [
+        ["css=a:nth-child(4)", "css:finder"],
+        ["xpath=//a[contains(text(),'Log out')]", "xpath:link"],
+        ["xpath=//div[@id='user-tools']/a[3]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/admin/logout/')]", "xpath:href"],
+        ["xpath=//a[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "24c57b95-ba1d-4890-8dbb-4c669da20094",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Log in again",
+      "targets": [
+        ["linkText=Log in again", "linkText"],
+        ["css=p > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Log in again')]", "xpath:link"],
+        ["xpath=//div[@id='content']/p[2]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/admin/')])[3]", "xpath:href"],
+        ["xpath=//p[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Log in again')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "87118070-ff4f-4fe3-85a1-c9b654868335",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_username",
+      "targets": [
+        ["id=id_username", "id"],
+        ["name=username", "name"],
+        ["css=#id_username", "css:finder"],
+        ["xpath=//input[@id='id_username']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "af450c48-293a-41c6-a45d-d68c70875567",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_username",
+      "targets": [
+        ["id=id_username", "id"],
+        ["name=username", "name"],
+        ["css=#id_username", "css:finder"],
+        ["xpath=//input[@id='id_username']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "parri"
+    }, {
+      "id": "60d09756-81f9-4eda-8a6f-65d40a1f8de9",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_password",
+      "targets": [
+        ["id=id_password", "id"],
+        ["name=password", "name"],
+        ["css=#id_password", "css:finder"],
+        ["xpath=//input[@id='id_password']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "52123d9e-da16-4ce9-985d-3fa71c9f2169",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_password",
+      "targets": [
+        ["id=id_password", "id"],
+        ["name=password", "name"],
+        ["css=#id_password", "css:finder"],
+        ["xpath=//input[@id='id_password']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "parriparri"
+    }, {
+      "id": "2845a091-fa83-4f99-b32c-f55c1c2837ad",
+      "comment": "",
+      "command": "click",
+      "target": "css=.submit-row > input",
+      "targets": [
+        ["css=.submit-row > input", "css:finder"],
+        ["xpath=//input[@value='Log in']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b44e3e71-ffb7-46ef-a3b9-1113c911bddf",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Censuss",
+      "targets": [
+        ["linkText=Censuss", "linkText"],
+        ["css=.model-census > th > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Censuss')]", "xpath:link"],
+        ["xpath=//div[@id='content-main']/div[5]/table/tbody/tr/th/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/admin/census/census/')]", "xpath:href"],
+        ["xpath=//div[5]/table/tbody/tr/th/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Censuss')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a09494d4-88b8-4173-a999-b3ca3bd951c9",
+      "comment": "",
+      "command": "click",
+      "target": "id=action-toggle",
+      "targets": [
+        ["id=action-toggle", "id"],
+        ["css=#action-toggle", "css:finder"],
+        ["xpath=//input[@id='action-toggle']", "xpath:attributes"],
+        ["xpath=//table[@id='result_list']/thead/tr/th/div/span/input", "xpath:idRelative"],
+        ["xpath=//span/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb166978-5c3a-41c5-9134-5fa94ea1b246",
+      "comment": "",
+      "command": "select",
+      "target": "name=action",
+      "targets": [],
+      "value": "label=Import census"
+    }, {
+      "id": "a41efa0e-3999-4680-90bd-951871603ef6",
+      "comment": "",
+      "command": "mouseDownAt",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=select", "css:finder"],
+        ["xpath=//select[@name='action']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/label/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "-103.9765625,-235.3046875"
+    }, {
+      "id": "30cdbe9d-7b88-42f6-a08a-505f32056768",
+      "comment": "",
+      "command": "mouseMoveAt",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=select", "css:finder"],
+        ["xpath=//select[@name='action']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/label/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "-103.9765625,-235.3046875"
+    }, {
+      "id": "09c9a3c8-8032-4e9d-88ef-df6ac1ae5ac7",
+      "comment": "",
+      "command": "mouseUpAt",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=select", "css:finder"],
+        ["xpath=//select[@name='action']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/label/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "-103.9765625,-235.3046875"
+    }, {
+      "id": "9d0da4e5-c25b-41a2-80a2-8cbbf106f304",
+      "comment": "",
+      "command": "click",
+      "target": "name=index",
+      "targets": [
+        ["name=index", "name"],
+        ["css=.button", "css:finder"],
+        ["xpath=//button[@name='index']", "xpath:attributes"],
+        ["xpath=//form[@id='changelist-form']/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Go')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ce980880-d990-467f-85a3-cd4903240060",
+      "comment": "",
+      "command": "click",
+      "target": "name=nuevoCenso",
+      "targets": [
+        ["name=nuevoCenso", "name"],
+        ["css=p > input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@name='nuevoCenso']", "xpath:attributes"],
+        ["xpath=//p/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "620fbae7-95c9-4306-ba0c-047e9b1f90dd",
+      "comment": "",
+      "command": "type",
+      "target": "name=nuevoCenso",
+      "targets": [
+        ["name=nuevoCenso", "name"],
+        ["css=p > input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@name='nuevoCenso']", "xpath:attributes"],
+        ["xpath=//p/input", "xpath:position"]
+      ],
+      "value": "C:\\home/parri/Desktop/decide-sierrezuela-part-3/decide/decide/census/testFiles/\\censoIncorrecto.csv"
+    }, {
+      "id": "31b8cf4e-8001-4707-b6f9-1515a55498a2",
+      "comment": "",
+      "command": "click",
+      "target": "css=input:nth-child(2)",
+      "targets": [
+        ["css=input:nth-child(2)", "css:finder"],
+        ["xpath=//input[@value='Cargar censo']", "xpath:attributes"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "cb9db270-c719-4eb3-a8f2-63b0fae8bfac",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["2b9d1517-3d98-4808-93af-9a16727fcc2d"]
+  }],
+  "urls": ["http://127.0.0.1:8000/"],
+  "plugins": []
+}
