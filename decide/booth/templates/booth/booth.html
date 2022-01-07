@@ -48,9 +48,6 @@
                     {% trans "Vote" %}
                 </b-button>
                 <b-button id="return_button" type="button" variant="primary" href="{% url "pagina-inicio" %}">Volver</b-button>
-                <b-button id="rankSendButton" :disabled="voteSuccess" v-if="selected.length ==0" class="mb-5 col-6 offset-3 col-sm-4 offset-sm-4 col-xl-2 offset-xl-5 btn-white" v-bind:class="{dp: csspd, trit: csstrit}" block type="button" variant="primary" size="lg" href="#" v-on:click="decideSend">
-                    {% trans "Enviar" %}
-                </b-button>
                     <br>
                         <p class="card-text mt-2">
                         Número de votos totales computados en esta votacion: {{ votos }}

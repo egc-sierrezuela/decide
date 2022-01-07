@@ -129,7 +129,7 @@ class Voting(models.Model):
 
     def do_postproc(self):
         tally = self.tally
-        tallies = ['IDENTITY', 'BORDA', 'HONDT', 'EQUALITY', 'SAINTE_LAGUE']
+        postprocs = ['IDENTITY', 'BORDA', 'HONDT', 'EQUALITY', 'SAINTE_LAGUE']
         data = []
 
         for i, q in enumerate(self.question.all()):
@@ -151,7 +151,7 @@ class Voting(models.Model):
                     'number': opt.number,
                     'votes': votes
                 })
-            data.append( { 'type': tallies[q.type],'options': opts})
+            data.append( { 'type': postprocs[q.type],'options': opts})
         postp = mods.post('postproc', json=data)
         self.postproc = postp
         self.save()
