@@ -1,5 +1,5 @@
-"""decide URL Configuration
 
+"""decide URL Configuration
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
 Examples:
@@ -17,6 +17,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
+from census import views as vc
+
 
 
 schema_view = get_swagger_view(title='Decide API')
@@ -25,9 +27,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('doc/', schema_view),
     path('gateway/', include('gateway.urls')),
+    path('admin/census/importar',vc.CensusImport,name='census_import'),
+    path('social-auth/', include('social_django.urls', namespace="social")),
 ]
 
 for module in settings.MODULES:
     urlpatterns += [
         path('{}/'.format(module), include('{}.urls'.format(module)))
     ]
+    
