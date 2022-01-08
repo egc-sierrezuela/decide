@@ -13,3 +13,6 @@ class BoothInstrucionsView(TemplateView):
 
 class VisualizerInstructionsView(TemplateView):
     template_name = 'visualizer.html'
+
+class StoreInstructionsView(TemplateView):
+    template_name = 'store.html'

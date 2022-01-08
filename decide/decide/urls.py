@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
 from django.contrib.auth import views as auth_views
-from base.views import IndexView, VotingInstructionsView, BoothInstrucionsView, VisualizerInstructionsView
+from base.views import IndexView, VotingInstructionsView, BoothInstrucionsView, VisualizerInstructionsView, StoreInstructionsView
 from authentication.views import LoginView, RegisterView
 from booth.views import BoothView, get_pagina_inicio
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path('boothInstructions', BoothInstrucionsView.as_view(), name="boothInstructions"),
     path('booth/', get_pagina_inicio, name="booth"),
     path('visualizerInstructions', VisualizerInstructionsView.as_view(), name="visualizerInstructions"),
+    path('storeInstructions/', StoreInstructionsView.as_view(), name="storeInstructions"),
     path('admin/', admin.site.urls, name="admin"),
     path('doc/', schema_view, name="doc"),
     path('authetication/register-alt', RegisterView, name="register"),
