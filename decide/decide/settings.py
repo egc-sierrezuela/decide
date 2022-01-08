@@ -160,6 +160,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.instagram.InstagramOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

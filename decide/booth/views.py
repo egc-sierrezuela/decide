@@ -61,7 +61,7 @@ def ingresar(request):
         if acceso[1] is not None:
             usuario = User.objects.all().filter(id=acceso[1])[0]
             if acceso[0]:
-                login(request, usuario)
+                login(request, usuario,backend='django.contrib.auth.backends.ModelBackend')
                 return (HttpResponseRedirect(reverse('pagina-inicio')))
                      
     return render(request, 'booth/login.html', {'formulario':formulario, 'STATIC_URL':settings.STATIC_URL})
