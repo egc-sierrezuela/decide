@@ -17,8 +17,8 @@ class PostProcTestCase(APITestCase):
 
 
     def test_identity(self):
-        data = [{
-            'type': 'IDENTITY',
+        data = {
+            'type': 0,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'votes': 5},
                 {'option': 'Option 2', 'number': 2, 'votes': 0},
@@ -27,10 +27,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 5', 'number': 5, 'votes': 5},
                 {'option': 'Option 6', 'number': 6, 'votes': 1},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'IDENTITY',
+            'type': 0,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'votes': 5,
                  'postproc': 5},
@@ -53,84 +53,29 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)
-        
-    #Value y expected_result son distintos
-    def test_identity_multiple_questions_fails(self):
-        data = [{
-            'type': 'IDENTITY',
+    
+    def test_identity_4_options(self):
+        data = {
+            'type': 0,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'votes': 5},
                 {'option': 'Option 2', 'number': 2, 'votes': 0},
-                {'option': 'Option 3', 'number': 3, 'votes': 3}
+                {'option': 'Option 3', 'number': 3, 'votes': 3},
+                {'option': 'Option 4', 'number': 4, 'votes': 2},
             ]
-        }, {
-            'type': 'IDENTITY',
-            'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': 2},
-                {'option': 'Option 2', 'number': 2, 'votes': 5},
-                {'option': 'Option 3', 'number': 3, 'votes': 1}
-            ]
-        }]
+        }
 
-        #El orden debe ser descendente, según el serializer
         expected_result = [{
-            'type': 'IDENTITY',
+            'type': 0,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'votes': 5,
                  'postproc': 5},
                 {'option': 'Option 3', 'number': 3, 'votes': 3,
                  'postproc': 3},
-                {'option': 'Option 2', 'number': 2, 'votes': 0,
-                 'postproc': 0}
-            ]
-        }]
-
-        response = self.client.post('/postproc/', data, format='json')
-        self.assertEqual(response.status_code, 200)
-
-        values = response.json()
-        self.assertNotEqual(values, expected_result)
-
-
-
-    #TEST PARA MULTIPLES PREGUNTAS--De Guadalentin
-    def test_identity_multiple_questions_1(self):
-        data = [{
-            'type': 'IDENTITY',
-            'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': 5},
-                {'option': 'Option 2', 'number': 2, 'votes': 0},
-                {'option': 'Option 3', 'number': 3, 'votes': 3}
-            ]
-        }, {
-            'type': 'IDENTITY',
-            'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': 2},
-                {'option': 'Option 2', 'number': 2, 'votes': 5},
-                {'option': 'Option 3', 'number': 3, 'votes': 1}
-            ]
-        }]
-
-        #El orden debe ser descendente, según el serializer
-        expected_result = [{
-            'type': 'IDENTITY',
-            'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': 5,
-                 'postproc': 5},
-                {'option': 'Option 3', 'number': 3, 'votes': 3,
-                 'postproc': 3},
-                {'option': 'Option 2', 'number': 2, 'votes': 0,
-                 'postproc': 0}
-            ]
-        }, {
-            'type': 'IDENTITY',
-            'options': [
-                {'option': 'Option 2', 'number': 2, 'votes': 5,
-                 'postproc': 5},
-                {'option': 'Option 1', 'number': 1, 'votes': 2,
+                {'option': 'Option 4', 'number': 4, 'votes': 2,
                  'postproc': 2},
-                {'option': 'Option 3', 'number': 3, 'votes': 1,
-                 'postproc': 1}
+                {'option': 'Option 2', 'number': 2, 'votes': 0,
+                 'postproc': 0},
             ]
         }]
 
@@ -140,48 +85,26 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)
-
-        
-    def test_identity_multiple_questions_2(self):
-        data = [{
-            'type': 'IDENTITY',
+    
+    def test_identity_3_options_without_votes(self):
+        data = {
+            'type': 0,
             'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': 10},
-                {'option': 'Option 2', 'number': 2, 'votes': 1},
-                {'option': 'Option 3', 'number': 3, 'votes': 2},
-                {'option': 'Option 4', 'number': 4, 'votes': 0}
+                {'option': 'Option 1', 'number': 1, 'votes': 0},
+                {'option': 'Option 2', 'number': 2, 'votes': 0},
+                {'option': 'Option 3', 'number': 3, 'votes': 0},
             ]
-        }, {
-            'type': 'IDENTITY',
-            'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': 2},
-                {'option': 'Option 2', 'number': 2, 'votes': 3},
-                {'option': 'Option 3', 'number': 3, 'votes': 1}
-            ]
-        }]
+        }
 
-        #El orden debe ser descendente, según el serializer
         expected_result = [{
-            'type': 'IDENTITY',
+            'type': 0,
             'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': 10,
-                 'postproc': 10},
-                {'option': 'Option 3', 'number': 3, 'votes': 2,
-                 'postproc': 2},
-                {'option': 'Option 2', 'number': 2, 'votes': 1,
-                 'postproc': 1},
-                {'option': 'Option 4', 'number': 4, 'votes': 0,
-                 'postproc': 0}
-            ]
-        }, {
-            'type': 'IDENTITY',
-            'options': [
-                {'option': 'Option 2', 'number': 2, 'votes': 3,
-                 'postproc': 3},
-                {'option': 'Option 1', 'number': 1, 'votes': 2,
-                 'postproc': 2},
-                {'option': 'Option 3', 'number': 3, 'votes': 1,
-                 'postproc': 1}
+                {'option': 'Option 1', 'number': 1, 'votes': 0,
+                 'postproc': 0},
+                {'option': 'Option 2', 'number': 2, 'votes': 0,
+                 'postproc': 0},
+                {'option': 'Option 3', 'number': 3, 'votes': 0,
+                 'postproc': 0},
             ]
         }]
 
@@ -191,11 +114,13 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)
+        
+
 
     #TESTS DE DHONT
     def test_DHONT(self):
-        data = [{
-            'type': 'DHONT',
+        data = {
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -204,10 +129,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 5', 'number': 5, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 180000},
                 {'option': 'Option 6', 'number': 6, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 170000},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'DHONT',
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 3},
@@ -232,8 +157,8 @@ class PostProcTestCase(APITestCase):
 
 
     def test_DHONT2(self):
-        data = [{
-            'type': 'DHONT',
+        data = {
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -241,10 +166,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 4', 'number': 4, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 180000},
                 {'option': 'Option 5', 'number': 5, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 20000},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'DHONT',
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 3},
@@ -267,8 +192,8 @@ class PostProcTestCase(APITestCase):
 
 
     def test_DHONT_without_points(self):
-        data = [{
-            'type': 'DHONT',
+        data = {
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -276,10 +201,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 4', 'number': 4, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 180000},
                 {'option': 'Option 5', 'number': 5, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 20000},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'DHONT',
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 0},
@@ -302,8 +227,8 @@ class PostProcTestCase(APITestCase):
 
 
     def test_DHONT_without_votes(self):
-        data = [{
-            'type': 'DHONT',
+        data = {
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
                 {'option': 'Option 2', 'number': 2, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
@@ -311,10 +236,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 4', 'number': 4, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
                 {'option': 'Option 5', 'number': 5, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'DHONT',
+            'type': 1,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
                  'postproc': 0},
@@ -338,26 +263,26 @@ class PostProcTestCase(APITestCase):
 
     def test_DHONT_without_option_attribute(self):
         with self.assertRaises(KeyError):
-            data = [{
-                'type': 'DHONT'
-            }]
+            data = {
+                'type': 1
+            }
 
             response = self.client.post('/postproc/', data, format='json')
             
 
     def test_DHONT_without_options(self):
         with self.assertRaises(Exception):
-            data = [{
-                'type': 'DHONT',
+            data = {
+                'type': 1,
                 'options': []
-            }]
+            }
 
             response = self.client.post('/postproc/', data, format='json')
             
     #TESTS DE BORDA
     def test_borda(self):
-        data = [{
-            'type': 'BORDA',
+        data = {
+            'type': 2,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'votes': [6, 1, 2, 4, 3, 2]},
                 {'option': 'Option 2', 'number': 2, 'votes': [1, 2, 7, 1, 6, 1]},
@@ -366,10 +291,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 5', 'number': 5, 'votes': [3, 6, 2, 2, 1, 4]},
                 {'option': 'Option 6', 'number': 6, 'votes': [2, 1, 1, 4, 4, 6]},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'BORDA',
+            'type': 2,
             'options': [
                 {'option': 'Option 3', 'number': 3, 'votes': [2, 7, 4, 3, 1, 1], 'postproc': 75},
                 {'option': 'Option 1', 'number': 1, 'votes': [6, 1, 2, 4, 3, 2], 'postproc': 69},
@@ -387,18 +312,18 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
 
     def test_borda_one_option(self):
-        data = [{
-            'type': 'BORDA',
+        data = {
+            'type': 2,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'votes': [4]},
                 {'option': 'Option 2', 'number': 2, 'votes': [3]},
                 {'option': 'Option 3', 'number': 3, 'votes': [2]},
                 {'option': 'Option 4', 'number': 4, 'votes': [1]},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'BORDA',
+            'type': 2,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'votes': [4], 'postproc': 4},
                 {'option': 'Option 2', 'number': 2, 'votes': [3], 'postproc': 3},
@@ -417,25 +342,23 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
 
     
-    def test_borda_different_size_preferences(self):
-        data = [{
-            'type': 'BORDA',
+
+        
+    #TESTS DE EQUALITY
+    def test_equality(self):
+        data = {
+            'type': 4,
             'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': [4,2]},
-                {'option': 'Option 2', 'number': 2, 'votes': [2,2,3]},
-                {'option': 'Option 3', 'number': 3, 'votes': [2,2]},
-                {'option': 'Option 4', 'number': 4, 'votes': [1,3]},
+                { 'option': 'Option 1' ,'number': 1,'points':10,'votes_masc': [1,0], 'votes_fem': [1,0] },
+                { 'option': 'Option 2', 'number': 2,'points':10,'votes_masc': [0,1], 'votes_fem': [0,1] },
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'BORDA',
+            'type': 4,
             'options': [
-                {'option': 'Option 1', 'number': 1, 'votes': [4,2], 'postproc': 10},
-                {'option': 'Option 3', 'number': 3, 'votes': [2,2], 'postproc': 6},
-                {'option': 'Option 4', 'number': 4, 'votes': [1,3], 'postproc': 5},
-                #Como la opcion 2 tiene mas variables se considera nula
-                {'option': 'Option 2', 'number': 2, 'votes': [2,2,3], 'postproc': 0},
+            { 'option': 'Option 1', 'number': 1,'points':10 ,'votes_masc': [1,0], 'votes_fem': [1,0], 'postproc': 2 },
+            { 'option': 'Option 2', 'number': 2,'points':10 ,'votes_masc': [0,1], 'votes_fem': [0,1], 'postproc': 2 },
             ]
         }]
 
@@ -445,29 +368,27 @@ class PostProcTestCase(APITestCase):
         values = response.json()
         self.assertEqual(values, expected_result)
         
+        
     #TESTS DE EQUALITY
-    def test_equality(self):
-        data = [{
-            'type': 'EQUALITY',
+    def test_equality_4_options(self):
+        data = {
+            'type': 4,
             'options': [
-                { 'option': 'Option 1', 'number': 1, 'votes_men': 2, 'votes_women': 3 },
-                { 'option': 'Option 2', 'number': 2, 'votes_men': 0, 'votes_women': 4 },
-                { 'option': 'Option 3', 'number': 3, 'votes_men': 3, 'votes_women': 1 },
-                { 'option': 'Option 4', 'number': 4, 'votes_men': 1, 'votes_women': 0 },
-                { 'option': 'Option 5', 'number': 5, 'votes_men': 1, 'votes_women': 3 },
-                { 'option': 'Option 6', 'number': 6, 'votes_men': 1, 'votes_women': 1 },
+                { 'option': 'Option 1' ,'number': 1,'points':10,'votes_masc': [1,0,0,0], 'votes_fem': [0,0,0,1] },
+                { 'option': 'Option 2', 'number': 2,'points':10,'votes_masc': [0,1,0,0], 'votes_fem': [0,0,0,0] },
+                { 'option': 'Option 3' ,'number': 3,'points':10,'votes_masc': [1,0,0,0], 'votes_fem': [1,0,0,0] },
+                { 'option': 'Option 4', 'number': 4,'points':10,'votes_masc': [0,1,0,0], 'votes_fem': [0,1,0,0] },
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'EQUALITY',
+            'type': 4,
             'options': [
-            { 'option': 'Option 1', 'number': 1, 'votes_men': 2, 'votes_women': 3, 'postproc': 4 },
-            { 'option': 'Option 3', 'number': 3, 'votes_men': 3, 'votes_women': 1, 'postproc': 4 },
-            { 'option': 'Option 2', 'number': 2, 'votes_men': 0, 'votes_women': 4, 'postproc': 3 },
-            { 'option': 'Option 5', 'number': 5, 'votes_men': 1, 'votes_women': 3, 'postproc': 3 },
-            { 'option': 'Option 6', 'number': 6, 'votes_men': 1, 'votes_women': 1, 'postproc': 2 },
-            { 'option': 'Option 4', 'number': 4, 'votes_men': 1, 'votes_women': 0, 'postproc': 1 },
+            { 'option': 'Option 1', 'number': 1,'points':10 ,'votes_masc': [1,0,0,0], 'votes_fem': [0,0,0,1] , 'postproc': 2 },
+            { 'option': 'Option 3', 'number': 3,'points':10 ,'votes_masc': [1,0,0,0], 'votes_fem': [1,0,0,0], 'postproc': 2 },
+            { 'option': 'Option 4', 'number': 4,'points':10 ,'votes_masc': [0,1,0,0], 'votes_fem': [0,1,0,0] , 'postproc': 2 },
+            { 'option': 'Option 2', 'number': 2,'points':10 ,'votes_masc': [0,1,0,0], 'votes_fem': [0,0,0,0] , 'postproc': 1 },
+            
             ]
         }]
 
@@ -479,8 +400,8 @@ class PostProcTestCase(APITestCase):
         
     #TESTS DE SAINT-LAGUE
     def test_sainte_lague(self):
-        data = [{
-            'type': 'SAINTE_LAGUE',
+        data = {
+            'type': 3,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -488,10 +409,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 4', 'number': 4, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 180000},
                 {'option': 'Option 5', 'number': 5, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 20000},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'SAINTE_LAGUE',
+            'type': 3,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 3},
@@ -514,8 +435,8 @@ class PostProcTestCase(APITestCase):
 
 
     def test_sainte_lague2(self):
-        data = [{
-            'type': 'SAINTE_LAGUE',
+        data = {
+            'type': 3,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -524,10 +445,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 5', 'number': 5, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 180000},
                 {'option': 'Option 6', 'number': 6, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 170000},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'SAINTE_LAGUE',
+            'type': 3,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 10, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 3},
@@ -552,8 +473,8 @@ class PostProcTestCase(APITestCase):
 
     
     def test_sainte_lague_without_points(self):
-        data = [{
-            'type': 'SAINTE_LAGUE',
+        data = {
+            'type': 3,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000},
                 {'option': 'Option 2', 'number': 2, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 420000},
@@ -561,10 +482,10 @@ class PostProcTestCase(APITestCase):
                 {'option': 'Option 4', 'number': 4, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 180000},
                 {'option': 'Option 5', 'number': 5, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 20000},
             ]
-        }]
+        }
 
         expected_result = [{
-            'type': 'SAINTE_LAGUE',
+            'type': 3,
             'options': [
                 {'option': 'Option 1', 'number': 1, 'points': 0, 'votes_masc': 0, 'votes_fem': 0, 'votes': 500000,
                  'postproc': 0},
@@ -588,31 +509,31 @@ class PostProcTestCase(APITestCase):
     
     def test_sainte_lague_without_votes(self):
         data = {
-            'type': 'SAINTE_LAGUE',
+            'type': 3,
             'options': [
-                {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
-                {'option': 'Option 2', 'number': 2, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
-                {'option': 'Option 3', 'number': 3, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
-                {'option': 'Option 4', 'number': 4, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
-                {'option': 'Option 5', 'number': 5, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0},
+                {'option': 'Option 1', 'number': 1, 'points': 8, 'votes': 0},
+                {'option': 'Option 2', 'number': 2, 'points': 8, 'votes': 0},
+                {'option': 'Option 3', 'number': 3, 'points': 8, 'votes': 0},
+                {'option': 'Option 4', 'number': 4, 'points': 8, 'votes': 0},
+                {'option': 'Option 5', 'number': 5, 'points': 8, 'votes': 0},
             ]
         }
 
-        expected_result = {
-            'type': 'SAINTE_LAGUE',
+        expected_result = [{
+            'type': 3,
             'options': [
-                {'option': 'Option 1', 'number': 1, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
+                {'option': 'Option 1', 'number': 1, 'points': 8, 'votes': 0,
                  'postproc': 0},
-                {'option': 'Option 2', 'number': 2, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
+                {'option': 'Option 2', 'number': 2, 'points': 8, 'votes': 0,
                  'postproc': 0},
-                {'option': 'Option 3', 'number': 3, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
+                {'option': 'Option 3', 'number': 3, 'points': 8, 'votes': 0,
                  'postproc': 0},
-                {'option': 'Option 4', 'number': 4, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
+                {'option': 'Option 4', 'number': 4, 'points': 8, 'votes': 0,
                  'postproc': 0},
-                {'option': 'Option 5', 'number': 5, 'points': 8, 'votes_masc': 0, 'votes_fem': 0, 'votes': 0,
+                {'option': 'Option 5', 'number': 5, 'points': 8, 'votes': 0,
                  'postproc': 0},
             ]
-        }
+        }]
 
         response = self.client.post('/postproc/', data, format='json')
         self.assertEqual(response.status_code, 200)
@@ -623,18 +544,18 @@ class PostProcTestCase(APITestCase):
 
     def test_sainte_lague_without_option_attribute(self):
         with self.assertRaises(KeyError):
-            data = [{
-                'type': 'SAINTE_LAGUE'
-            }]
+            data = {
+                'type': 3
+            }
 
             response = self.client.post('/postproc/', data, format='json')
             
 
     def test_sainte_lague_without_options(self):
         with self.assertRaises(IndexError):
-            data = [{
-                'type': 'SAINTE_LAGUE',
+            data = {
+                'type': 3,
                 'options': []
-            }]
+            }
 
             response = self.client.post('/postproc/', data, format='json')

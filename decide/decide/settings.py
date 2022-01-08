@@ -121,7 +121,7 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'decide',
         'USER': 'decide',
         'PASSWORD': 'decide',
         'HOST': '127.0.0.1',
@@ -225,6 +225,5 @@ if os.path.exists("config.jsonnet"):
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
 
-'''import django_heroku
-django_heroku.settings(locals())'''
+
 
