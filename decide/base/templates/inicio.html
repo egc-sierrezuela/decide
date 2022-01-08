@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrahead %}
+
+{% endblock %}
+
+{% block content %}
+
+    <h1>¡Bienvenidos a Decide!</h1>
+    <div class="row">
+        <div class="col-4">
+            <h2>Votación</h2>
+            <a class="btn btn-success" href="{% url 'votingInstructions' %}">Instrucciones</a>
+        </div>
+
+        <div class="col-4">
+            <h2>Cabina</h2>
+            <a class="btn btn-success" href="{% url 'boothInstructions' %}">Instrucciones</a>
+            <a class="btn btn-success" href="{% url 'booth' %}">Acceder</a>
+        </div>
+
+        <div class="col-4">
+            <h2>Visualización</h2>
+            <a class="btn btn-success" href="{% url 'visualizerInstructions' %}">Instrucciones</a>
+        </div>
+    </div>
+
+    
+{% endblock %} 
