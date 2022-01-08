@@ -82,6 +82,7 @@ def get_pagina_inicio(request):
     sol = []
     template = 'booth/inicio.html'
     user_actual = request.user
+    print(request.session['user_token'])
     usuario_valido = User.objects.all().filter(id=user_actual.id).count()
     num_censos_votante_actual = Census.objects.all().filter(voter_id=user_actual.id).count()
     censos_votante_actual = Census.objects.all().filter(voter_id=user_actual.id)

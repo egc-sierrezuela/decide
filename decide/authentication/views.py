@@ -6,6 +6,7 @@ from rest_framework.status import (
         HTTP_400_BAD_REQUEST,
         HTTP_401_UNAUTHORIZED
 )
+from base import mods
 from rest_framework.views import APIView, View
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
@@ -102,8 +103,22 @@ class RegisterView(View):
             return render(request,'register.html',params)
         return redirect('/authentication/login-success')
 
+def autenticacion(request, username, password):
+        token= mods.post('authentication', entry_point='/login/', json={'username':username, 'password':password})
+        request.session['user_token']=token
+        voter = mods.post('authentication', entry_point='/getuser/', json=token)
+        voter_id = voter.get('id', None)
+        request.session['voter_id'] = voter_id
+
+        if voter_id == None:
+            return False, voter_id
+
+        return True, voter_id
+
 class LoginView(View):
+
     def get(get, request):
+        print(request.user)
         if(request.user.is_authenticated):
             return HttpResponse('Debe ingresar como usuario anonimo',status=403)
         form = AuthenticationForm()
@@ -114,19 +129,27 @@ class LoginView(View):
         form = AuthenticationForm(request.POST)
         usuario = request.POST['username']
         pwd = request.POST['password']
-        acceso = authenticate(username=usuario,password=pwd)
-        if acceso is None:
+        acceso = autenticacion(request,username=usuario,password=pwd)
+        params = {'form':form, 'message':'Usuario o contraseña incorrectas.'}
+        '''if acceso[1] is None:
             params = {'form':form, 'message':'Usuario o contraseña incorrectas.'}
             return render(request,'login.html',params)
-        if not acceso.is_active:
+        if not acceso[1].is_active:
             params = {'form':form, 'message':'Usuario no activo.'}
             return render(request,'login.html',params)
-        login(request,acceso)
-        return redirect('/authentication/login-success')
+        login(request,acceso[1])'''
+        if acceso[1] is not None:
+            usuario = User.objects.all().filter(id=acceso[1])[0]
+            if acceso[0]:
+                login(request, usuario,backend='django.contrib.auth.backends.ModelBackend')
+                print(request.user)
+                return render(request,'successful_login.html')
+        return render(request,'login.html',params)
 
 
 class SuccessView(View):
     def get(get, request):
+        print(request.user)
         if(not request.user.is_authenticated):
             return HttpResponse('Debe iniciar sesion',status=401)
         return render(request,'successful_login.html')

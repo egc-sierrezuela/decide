@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
@@ -91,7 +92,7 @@ class Voting(models.Model):
         '''
         The tally is a shuffle and then a decrypt
         '''
-
+        #u=User.objects.all().filter(id=1)[0].auth_token
         votes = self.get_votes(token)
 
         auth = self.auths.first()
