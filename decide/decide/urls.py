@@ -17,17 +17,26 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
-from census import views as vc
-
-
+from django.contrib.auth import views as auth_views
+from base.views import IndexView, VotingInstructionsView, BoothInstrucionsView, VisualizerInstructionsView, StoreInstructionsView
+from authentication.views import LoginView, RegisterView
+from booth.views import BoothView, get_pagina_inicio
 
 schema_view = get_swagger_view(title='Decide API')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('doc/', schema_view),
+    path('', IndexView.as_view(), name="index"),
+    path('votingInstructions', VotingInstructionsView.as_view(), name="votingInstructions"),
+    path('boothInstructions', BoothInstrucionsView.as_view(), name="boothInstructions"),
+    path('booth/', get_pagina_inicio, name="booth"),
+    path('visualizerInstructions', VisualizerInstructionsView.as_view(), name="visualizerInstructions"),
+    path('storeInstructions/', StoreInstructionsView.as_view(), name="storeInstructions"),
+    path('admin/', admin.site.urls, name="admin"),
+    path('doc/', schema_view, name="doc"),
+    path('authetication/register-alt', RegisterView, name="register"),
+    path('authetication/login-alt', LoginView, name="login"),
+    path('authetication/logout-alt',auth_views.LogoutView.as_view(), name="logout"),
     path('gateway/', include('gateway.urls')),
-    path('admin/census/importar',vc.CensusImport,name='census_import'),
     path('social-auth/', include('social_django.urls', namespace="social")),
 ]
 
