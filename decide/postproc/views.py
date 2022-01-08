@@ -25,8 +25,8 @@ class PostProcView(APIView):
         is_men_greater = False
 
         for opt in options:
-            n_women += opt['votes_women']
-            n_men += opt['votes_men']
+            n_women += sum(opt['votes_fem'])
+            n_men += sum(opt['votes_masc'])
 
         if n_women > n_men:
             rel = n_men/n_women
@@ -37,9 +37,9 @@ class PostProcView(APIView):
         for opt in options:
             votes = 0
             if is_men_greater:
-                votes = opt['votes_women'] + opt['votes_men']*rel
+                votes = sum(opt['votes_fem']) + sum(opt['votes_masc'])*rel
             else:
-                votes = opt['votes_men'] + opt['votes_women']*rel
+                votes = sum(opt['votes_masc'])+ sum(opt['votes_fem'])*rel
 
             out.append({
                 **opt,
@@ -128,8 +128,6 @@ class PostProcView(APIView):
 
         out = []
         questions = request.data
-        print('questionsssssss')
-        print(questions)
 
         result = None
         t = questions['type']

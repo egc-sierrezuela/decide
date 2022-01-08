@@ -73,7 +73,6 @@ def check_user_has_voted(context, voting_id, voter_id):
 
 def logout_view(request):
     logout(request)
-    print(request.user)
     return HttpResponseRedirect(reverse('pagina-inicio'))
 
 @login_required(login_url="/booth/login")
@@ -82,7 +81,6 @@ def get_pagina_inicio(request):
     sol = []
     template = 'booth/inicio.html'
     user_actual = request.user
-    print(request.session['user_token'])
     usuario_valido = User.objects.all().filter(id=user_actual.id).count()
     num_censos_votante_actual = Census.objects.all().filter(voter_id=user_actual.id).count()
     censos_votante_actual = Census.objects.all().filter(voter_id=user_actual.id)
