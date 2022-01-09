@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+    <link type="text/css" rel="stylesheet"
+         href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet"
+         href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+{% endblock %}
+
+{% block content %}
+<div>
+<form method="post" class>{% csrf_token %}
+	{{form.as_p}}
+	<input class="btn btn-primary" type="Submit" value="Registrar"/>
+</form>
+<br></br>
+<button>
+     <a href="/authentication/login-alt/">Inicia sesión</a>
+ </button> 
+{% if message %}
+<p>Error: {{message}}</p>
+{% endif %}
+</div>
+{% endblock %}
