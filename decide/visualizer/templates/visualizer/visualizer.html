@@ -40,7 +40,11 @@
 
                 </div>
             </div>
-            <div v-else-if="voting.end_date">
+            <div v-else-if="voting.end_date && voting.tally==null">
+                <h4>Título: [[voting.name]]</h4>
+                <h5>Estado: Cerrada</h5>
+            </div>
+            <div v-else-if="voting.end_date && voting.tally!=null">
                 <div v-if="voting.postproc[0].type==0"> <!--identity-->
                     <h4>Título: [[voting.name]]</h4>
                     <h5>Estado: Cerrada</h5>
