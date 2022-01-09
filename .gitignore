@@ -102,3 +102,4 @@ ENV/
 
 .vagrant
 local_settings.py
+.vscode/settings.json

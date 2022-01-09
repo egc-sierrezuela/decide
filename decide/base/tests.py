@@ -20,6 +20,10 @@ class BaseTestCase(APITestCase):
         user_admin.set_password('qwerty')
         user_admin.save()
 
+        user_adminprueba = User(username='adminprueba', is_staff=True, is_superuser = True)
+        user_adminprueba.set_password('qwerty')
+        user_adminprueba.save()
+
     def tearDown(self):
         self.client = None
         self.token = None

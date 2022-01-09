@@ -61,7 +61,7 @@ def ingresar(request):
         if acceso[1] is not None:
             usuario = User.objects.all().filter(id=acceso[1])[0]
             if acceso[0]:
-                login(request, usuario)
+                login(request, usuario,backend='django.contrib.auth.backends.ModelBackend')
                 return (HttpResponseRedirect(reverse('pagina-inicio')))
                      
     return render(request, 'booth/login.html', {'formulario':formulario, 'STATIC_URL':settings.STATIC_URL})
@@ -73,7 +73,6 @@ def check_user_has_voted(context, voting_id, voter_id):
 
 def logout_view(request):
     logout(request)
-    print(request.user)
     return HttpResponseRedirect(reverse('pagina-inicio'))
 
 @login_required(login_url="/booth/login")
@@ -172,7 +171,7 @@ def send_suggesting_form(request):
         content = request.POST['suggesting-content']
         send_date = timezone.now().date()
 
-        s_date = datetime.datetime.strptime(str_s_date, '%Y-%m-%d').date()
+        s_date = datetime.strptime(str_s_date, '%Y-%m-%d').date()
 
         if is_future_date(s_date):
             s = Sugerencia(user_id=user_id, title=title, suggesting_date=s_date, content=content, send_date=send_date)
