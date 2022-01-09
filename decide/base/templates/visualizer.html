@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrahead %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Instrucciones de visualización</h1>
+<h4>Para ver el estado de la votación debes seguir los siguientes pasos:</h4>
+<ul class="text-start">
+    <li>Asegurarse de que tenemos una votación creada</li>
+    <li>Accedemos a visualizer/{id_votación} donde <em>{id_votacion}</em> es el número de identificación de la votación a la que quieres acceder</li>
+    <li>Podemos ver tres posibilidades:
+        <ul>
+            <li>Si la votación todavía no se ha iniciado mostrará el título de la votación y en el campo estado indicará que la votación no ha comenzado</li>
+            <li>Si la votación se encuentra en progreso se mostrará el estado, el número de personas censadas en esa votación, el porcentaje de participación y el número de votos totales</li>
+            <li>Si la votación está finalizada se indicará en el estado y se mostrarán los resultados obtenidos</li>
+        </ul>
+    </li>
+</ul>
+{% endblock %} 

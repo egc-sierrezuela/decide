@@ -17,33 +17,129 @@
         </b-navbar>
 
         <div class="voting container">
-            <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
-
-            <h2 v-if="!voting.start_date">Votación no comenzada</h2>
-            <h2 v-else-if="!voting.end_date">Votación en curso</h2>
-            <div v-else>
-                <h2 class="heading">Resultados:</h2>
-
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Opción</th>
-                            <th>Puntuación</th>
-                            <th>Votos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="opt in voting.postproc" :key="opt.number">
-                            <th>[[opt.option]]</th>
-                            <td>[[opt.postproc]]</td>
-                            <td class="text-muted">[[opt.votes]]</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div v-if="!voting.start_date">
+                <h4>Título: [[voting.name]]</h4>
+                <h5>Estado: Votación no comenzada.</h5>
             </div>
 
+            <div v-else-if="!voting.end_date">
+                <div id="head-voting-v">
+                    <h4>Título: [[voting.name]]</h4>
+                    <h5>Estado: Votación en progreso.</h5>
+ 
+                </div>
+
+                <div id="statistics-voting" class="row">
+                    <h6>Censo: {{stats_census_size}}</h6>
+                    <h6>Porcentaje de participación: {{stats_participation_ratio}}</h6>
+                    <h6>Número de votos: {{stats_voters_turnout}}</h6>
+                </div>
+                <div>
+                    <h4>Gráfico</h4>
+                    <canvas id="graficoPorcentajeVotaciones"></canvas>
+
+                </div>
+            </div>
+            <div v-else-if="voting.end_date">
+                <div v-if="voting.postproc[0].type==0"> <!--identity-->
+                    <h4>Título: [[voting.name]]</h4>
+                    <h5>Estado: Cerrada</h5>
+                    <h2 class="heading">Resultados:</h2>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Opción</th>
+                                <th>Votos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="opt in voting.postproc[0].options" :key="opt.number">
+                                <th>[[opt.option]]</th>
+                                <td>[[opt.votes]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-else-if="voting.postproc[0].type==2"> <!--borda-->
+                    <h4>Título: [[voting.name]]</h4>
+                    <h5>Estado: Cerrada</h5>
+                    <h2 class="heading">Resultados:</h2>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Opción</th>
+                                <th>Votos</th>
+                                <th>Peso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="opt in voting.postproc[0].options" :key="opt.number">
+                                <th>[[opt.option]]</th>
+                                <td>[[opt.votes]]</td>
+                                <td>[[opt.postproc]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Info: Los votos están formados por una lista de la longitud del número de
+                        opciones representando así su posición. Esta lista indica el número de veces que se ha votado cada opción en cada posición.
+                    </p>
+                </div>
+                <div v-else-if="voting.postproc[0].type==4"> <!--equality-->
+                    <h4>Título: [[voting.name]]</h4>
+                    <h5>Estado: Cerrada</h5>
+                    <h2 class="heading">Resultados:</h2>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Opción</th>
+                                <th>Votos Femeninos</th>
+                                <th>Votos Masculinos</th>
+                                <th>Peso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="opt in voting.postproc[0].options" :key="opt.number">
+                                <th>[[opt.option]]</th>
+                                <td>[[opt.votes_fem]]</td>
+                                <td>[[opt.votes_masc]]</td>
+                                <td>[[opt.postproc]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Info: Los votos están formados por una lista de la longitud del número de
+                        opciones representando así su posición. Esta lista indica el número de votos fem/masc de cada opción en su posición.
+                    </p>
+                </div>
+                <div v-else> <!--dhont 1--> <!--sainte lague 3-->
+                    <h4>Título: [[voting.name]]</h4>
+                    <h5>Estado: Cerrada</h5>
+                    <h5>Puntos: [[voting.postproc[0].options[0].points]]</h5>
+                    <h2 class="heading">Resultados:</h2>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Opción</th>
+                                <th>Votos</th>
+                                <th>Puntos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="opt in voting.postproc[0].options" :key="opt.number">
+                                <th>[[opt.option]]</th>
+                                <td>[[opt.votes]]</td>
+                                <td>[[opt.postproc]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
+
+
+
+
 {% endblock %}
 
 {% block extrabody %}
@@ -62,5 +158,25 @@
             }
         })
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById('graficoPorcentajeVotaciones').getContext('2d');
+        var a1="{{stats_census_size}}";
+        var a2="{{stats_voters_turnout}}";
+        
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data:{
+            datasets: [{
+                data: [a1,a2],
+                backgroundColor: [ 'red','blue'],
+                label: 'Estado de la votación'}],
+                labels: ['Número de personas que han votado','Número de personas que no han votado']},
+            options: {responsive: true}
+        });
+        </script>
+        
 </body>
 {% endblock %}
+
+

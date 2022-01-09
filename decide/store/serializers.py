@@ -4,8 +4,6 @@ from .models import Vote
 
 
 class VoteSerializer(serializers.HyperlinkedModelSerializer):
-    a = serializers.IntegerField()
-    b = serializers.IntegerField()
 
     class Meta:
         model = Vote

@@ -6,66 +6,96 @@
          href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
-    <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
 {% endblock %}
 
 {% block content %}
-    <div id="app-booth">
+    {% if puede_votar %}
         <!-- Navbar -->
-        <b-navbar type="dark" variant="secondary">
-            <b-navbar-brand tag="h1">Decide</b-navbar-brand>
-                <b-navbar-nav class="ml-auto" v-if="!signup">
-                    <b-nav-item href="#" v-on:click="decideLogout">
-                        {% trans "logout" %}
-                    </b-nav-item>
-                </b-navbar-nav>
-        </b-navbar>
+            <nav class="navbar navbar-light bg-info">
+                <a class="navbar-brand" href="#">
+                <img src="../../static/booth/images/decideD.png" width="40" height="30" class="d-inline-block align-top" alt="">
+                Decide
+                </a>
+            </nav>
 
-        <b-alert :variant="alertLvl" dismissible v-model="alertShow">
-            [[ alertMsg ]]
-        </b-alert>
+            <div id="app-booth">
+                <div class="voting-externa">
 
-        <div class="voting">
-            <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
+                    <b-alert :variant="alertLvl" dismissible v-model="alertShow">
+                        [[ alertMsg ]]
+                    </b-alert>
+                {% if rank_order_scale %} 
+                    <div id="questionHelp">Pregunta de ordenación con [[ voting.question.options.length ]] opciones. A continuación se presenta la pregunta que has de responder, las instrucciones para el voto y las opciones.</div>
+                        <p >Seleccione todas las opciones en orden de preferencia de mayor a menor. El orden seleccionado aparece en la parte inferior en forma de lista.</p>
+                        <p >Pulse el botón "Enviar" para confirmar su selección y efectuar el voto.</p>
+                        <b-form-group v-for="opt in voting.question.options" :key="opt.number">
+                            <b-form-checkbox :disabled="voteSuccess"
+                                            v-model="selected"
+                                            :id="'q' + opt.number"
+                                            class="choice-question pb-3"
+                                            v-bind:class="{dp: csspd, trit: csstrit}"
+                                            name="question"
+                                            button
+                                            size="lg"
+                                            :value="opt.number">
+                                    [[ opt.option ]]
+                            </b-form-checkbox>
+                        </b-form-group>
+                        <div>
+                            <h3 v-if="selected.length > 0">El orden seleccionado es:</h3>
+                            <h4>
+                                <ol>
+                                    <li class="py-2" v-for="opt in selected">
+                                        <div v-for="option in voting.question.options">
+                                            <h4 v-if="option.number == opt">[[option.option]]</h4>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </h4>
+                        </div>
+                        <b-button id="rankSendButton" :disabled="voteSuccess" v-if="selected.length == voting.question.options.length" class="mb-5 col-6 offset-3 col-sm-4 offset-sm-4 col-xl-2 offset-xl-5 btn-white" v-bind:class="{dp: csspd, trit: csstrit}" block type="button" variant="primary" size="lg" href="#" v-on:click="decideSend">
+                            {% trans "Enviar" %}
+                        </b-button>
+                {% else %}
+                <div class="voting">
+                    <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
 
-            <!-- Register -->
-            <b-form @submit="onSubmitLogin" v-if="signup">
-                <b-form-group label="{% trans "Username" %}" label-for="username">
-                    <b-form-input
-                        id="username"
-                        type="text"
-                        v-model="form.username"
-                        autocomplete="username"
-                        required />
-                </b-form-group>
-                <b-form-group label="{% trans "Password" %}" label-for="password">
-                    <b-form-input
-                        id="password"
-                        type="password"
-                        autocomplete="current-password"
-                        v-model="form.password"
-                        required />
-                </b-form-group>
-                <b-button type="submit" variant="primary">{% trans "Login" %}</b-button>
-            </b-form>
+                    <!-- Voting -->
+                    <div v-if="!signup">
+                        <h2>[[ voting.question.desc ]]</h2>
+                        <b-form-group v-for="opt in voting.question.options" :key="opt.number">
+                            <b-form-radio v-model="selected"
+                                        :id="'q' + opt.number"
+                                        name="question"
+                                        :value="opt.number">
+                                [[ opt.option ]]
+                            </b-form-radio>
+                        </b-form-group>
 
-            <!-- Voting -->
-            <div v-if="!signup">
-                <h2>[[ voting.question.desc ]]</h2>
-                <b-form-group v-for="opt in voting.question.options" :key="opt.number">
-                    <b-form-radio v-model="selected"
-                                  :id="'q' + opt.number"
-                                  name="question"
-                                  :value="opt.number">
-                        [[ opt.option ]]
-                    </b-form-radio>
-                </b-form-group>
-                <b-button type="button" variant="primary" v-on:click="decideSend">
-                    {% trans "Vote" %}
-                </b-button>
+                        <b-button id="voting_button" type="button" variant="primary" v-on:click="decideSend">
+                            {% trans "Vote" %}
+                        </b-button>
+                        <b-button id="return_button" type="button" variant="primary" href="{% url "pagina-inicio" %}">Volver</b-button>
+
+                        <br>
+                            <p class="card-text mt-2">
+                            Número de votos totales computados en esta votacion: {{ votos }}
+                            </p>
+                    </div> 
+                </div>
+                {% endif %}
+                </div>
             </div>
+        <div class="voting-images">
+            <img src="../../static/booth/images/votaciones.png"
         </div>
-    </div>
+    {% else %}
+        <h2>Error</h2>
+        <div>
+            <p>No tiene acceso a esta votacion <a href="{% url "pagina-inicio" %}">Volver</a></p>
+        </div>
+    {% endif %}
+
 {% endblock %}
 
 {% block extrabody %}
@@ -87,28 +117,28 @@
 
     <script>
         var voting = {{voting|safe}};
+        var user = {{voter|safe}};
+        var token = {{token|safe}};
         var app = new Vue({
             delimiters: ['[[', ']]'],
             el: '#app-booth',
             data: {
                 keybits: {{ KEYBITS }},
                 voting: voting,
-                selected: "",
-                signup: true,
+                selected: [],
                 alertShow: false,
                 alertMsg: "",
                 alertLvl: "info",
-                token: null,
-                user: null,
-                form: {
-                    username: '',
-                    password: ''
-                },
+                token: token,
+                user: user,
                 bigpk: {
                     p: BigInt.fromJSONObject(voting.pub_key.p.toString()),
                     g: BigInt.fromJSONObject(voting.pub_key.g.toString()),
                     y: BigInt.fromJSONObject(voting.pub_key.y.toString()),
-                }
+                },
+                voteSuccess: false,
+                csspd: false,
+                csstrit: false
             },
             beforeMount() {
                 this.init()

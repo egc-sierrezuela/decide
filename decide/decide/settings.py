@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -68,19 +69,18 @@ MODULES = [
     'social_django',
 ]
 
-
-BASEURL = 'https://egc-sierrezuela-2.herokuapp.com'
+BASEURL = 'http://localhost:8000/'
 
 APIS = {
-    'authentication': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'base': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'booth': 'hhttps://egc-sierrezuela-2.herokuapp.com/',
-    'census': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'mixnet': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'postproc': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'store': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'visualizer': 'https://egc-sierrezuela-2.herokuapp.com/',
-    'voting': 'https://egc-sierrezuela-2.herokuapp.com/',
+    'authentication': BASEURL,
+    'base': BASEURL,
+    'booth': BASEURL,
+    'census': BASEURL,
+    'mixnet': BASEURL,
+    'postproc': BASEURL,
+    'store': BASEURL,
+    'visualizer': BASEURL,
+    'voting': BASEURL,
 }
 
 
@@ -121,7 +121,7 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'decide',
         'USER': 'decide',
         'PASSWORD': 'decide',
         'HOST': '127.0.0.1',
@@ -160,6 +160,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.instagram.InstagramOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -224,6 +225,5 @@ if os.path.exists("config.jsonnet"):
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
 
-import django_heroku
-django_heroku.settings(locals())
+
 
