@@ -33,7 +33,7 @@ urlpatterns = [
     path('storeInstructions/', StoreInstructionsView.as_view(), name="storeInstructions"),
     path('admin/', admin.site.urls, name="admin"),
     path('doc/', schema_view, name="doc"),
-    path('authentication/register-alt', RegisterView, name="register"),
+    path('authentication/register-alt/', RegisterView, name="register"),
     path('authentication/login-alt', LoginView, name="login"),
     path('authentication/logout-alt',auth_views.LogoutView.as_view(), name="logout"),
     path('gateway/', include('gateway.urls')),
