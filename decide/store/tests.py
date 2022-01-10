@@ -79,8 +79,8 @@ class StoreTextCase(BaseTestCase):
 
     def test_store_vote(self):
         VOTING_PK = 345
-        CTE_A = 96
-        CTE_B = 184
+        CTE_A = '96'
+        CTE_B = '184'
         census = Census(voting_id=VOTING_PK, voter_id=1)
         census.save()
         self.gen_voting(VOTING_PK)
