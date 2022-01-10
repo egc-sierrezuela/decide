@@ -21,6 +21,7 @@ from django.contrib.auth import views as auth_views
 from base.views import IndexView, VotingInstructionsView, BoothInstrucionsView, VisualizerInstructionsView, StoreInstructionsView
 from authentication.views import LoginView, RegisterView
 from booth.views import BoothView, get_pagina_inicio
+from census import views as vc
 
 schema_view = get_swagger_view(title='Decide API')
 
@@ -38,6 +39,7 @@ urlpatterns = [
     path('authentication/logout-alt',auth_views.LogoutView.as_view(), name="logout"),
     path('gateway/', include('gateway.urls')),
     path('social-auth/', include('social_django.urls', namespace="social")),
+    path('admin/census/importar',vc.CensusImport,name='census_import'),
 ]
 
 for module in settings.MODULES:
