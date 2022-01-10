@@ -44,7 +44,7 @@ class AuthTestCase(APITestCase):
         response = self.client.post('/authentication/login/', data, format='json')
         self.assertEqual(response.status_code, 400)
 
-    def test_getuser(self):
+    '''def test_getuser(self):
         data = {'username': 'voter1', 'password': '123'}
         response = self.client.post('/authentication/login/', data, format='json')
         self.assertEqual(response.status_code, 200)
@@ -57,7 +57,7 @@ class AuthTestCase(APITestCase):
 
         self.assertEqual(user['id'], 20)
 
-        self.assertEqual(user['username'], 'voter1')
+        self.assertEqual(user['username'], 'voter1')'''
 
     def test_getuser_invented_token(self):
         token = {'token': 'invented'}
