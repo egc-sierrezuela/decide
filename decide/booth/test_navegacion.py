@@ -84,7 +84,8 @@ class NavigationTest(StaticLiveServerTestCase):
         self.driver.find_element_by_id('suggestingTitle').send_keys("Propuesta tests")
         self.driver.find_element_by_id('suggestingDate').send_keys("01-01-2023")
         self.driver.find_element_by_id('suggestingContent').send_keys("Propuesta para hacer una nueva votacion como parte de los test de navegacion")
-        self.driver.find_element_by_id('submitSugForm').click()
+        WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, "submitSugForm"))).click()
+        #self.driver.find_element_by_id('submitSugForm').click()
 
         self.assertEquals(self.driver.current_url,f'{self.live_server_url}/booth/')
 
